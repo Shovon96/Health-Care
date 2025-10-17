@@ -1,0 +1,72 @@
+// User Table Data
+model User {
+    id                 String     @id @default(uuid())
+    email              String     @unique
+    password           String
+    role               UserRole
+    needPasswordChange Boolean    @default(true)
+    status             UserStatus
+    createdAt          DateTime   @default(now())
+    updatedAt          DateTime   @updatedAt
+    admin              Admin?
+    doctor             Doctor?
+    patient            Patient?
+
+    @@map("users")
+}
+
+// Admin Data Table
+model Admin {
+    id            String   @id @default(uuid())
+    name          String
+    email         String   @unique
+    profilePhoto  String?
+    contactNumber String
+    isDeleted     Boolean  @default(false)
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+
+    user User @relation(fields: [email], references: [email])
+
+    @@map("admins")
+}
+
+// Doctor Data Table
+model Doctor {
+    id                  String   @id @default(uuid())
+    name                String
+    email               String   @unique
+    profilePhoto        String?
+    contactNumber       String
+    address             String
+    registationNumber   String
+    experience          Int      @default(0)
+    gender              Gender
+    appointmentFee      Int
+    qualification       String
+    currentWorkingPlace String?
+    designation         String
+    isDeleted           Boolean  @default(false)
+    createdAt           DateTime @default(now())
+    updatedAt           DateTime @updatedAt
+
+    user User @relation(fields: [email], references: [email])
+
+    @@map("doctors")
+}
+
+// Patient Data Table
+model Patient {
+    id           String   @id @default(uuid())
+    email        String   @unique
+    name         String
+    profilePhoto String?
+    address      String
+    isDeleted    Boolean  @default(false)
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    user User @relation(fields: [email], references: [email])
+
+    @@map("patients")
+}
