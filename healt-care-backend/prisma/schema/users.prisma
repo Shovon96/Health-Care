@@ -3,9 +3,9 @@ model User {
     id                 String     @id @default(uuid())
     email              String     @unique
     password           String
-    role               UserRole
+    role               UserRole @default(PATIENT)
     needPasswordChange Boolean    @default(true)
-    status             UserStatus
+    status             UserStatus @default(ACTIVE)
     createdAt          DateTime   @default(now())
     updatedAt          DateTime   @updatedAt
     admin              Admin?
@@ -61,7 +61,7 @@ model Patient {
     email        String   @unique
     name         String
     profilePhoto String?
-    address      String
+    address      String?
     isDeleted    Boolean  @default(false)
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt

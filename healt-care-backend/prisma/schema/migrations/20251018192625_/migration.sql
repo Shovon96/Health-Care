@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "patients" ALTER COLUMN "address" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "users" ALTER COLUMN "role" SET DEFAULT 'PATIENT',
+ALTER COLUMN "status" SET DEFAULT 'ACTIVE';
