@@ -1,38 +1,36 @@
 import { Request } from "express";
+import bcrypt from "bcryptjs";
 import { prisma } from "../../shared/prisma";
 import { createPatient } from "./user.interface";
-import bcrypt from "bcryptjs";
 import { FileUploader } from "../../helper/fileUploader";
+import config from "../../../config";
 
 const createPatient = async (req: Request) => {
 
-    if (req.file) {
-        const uploadResult = await FileUploader.uploadToCloudinary(req.file)
-        console.log(uploadResult)
+    const isUserExist = await prisma.user.findUnique({ where: { email: req?.body.patient?.email } });
+    if (isUserExist) {
+        throw new Error('This Email with user already exists!');
     }
 
-    // const passwordHash = await bcrypt.hash(req.body.password, parseInt(process.env.BCRYPT_SALT_ROUNDS as string));
+    if (req.file) {
+        const uploadResult = await FileUploader.uploadToCloudinary(req.file)
+        req.body.patient.profilePhoto = uploadResult?.secure_url;
+    }
 
-    // const isEmailExist = await prisma.user.findUnique({ where: { email: req.body.email } });
-    // if (isEmailExist) {
-    //     throw new Error('Email already exists');
-    // }
+    const passwordHash = await bcrypt.hash(req.body.password, parseInt(config.bcrypt_salt_rounds as string));
 
-    // const result = await prisma.$transaction(async (trans) => {
-    //     await trans.user.create({
-    //         data: {
-    //             email: req.body.email,
-    //             password: passwordHash
-    //         }
-    //     })
-    //     return await trans.patient.create({
-    //         data: {
-    //             name: req.body.name,
-    //             email: req.body.email
-    //         }
-    //     })
-    // })
-    // return result;
+    const result = await prisma.$transaction(async (trans) => {
+        await trans.user.create({
+            data: {
+                email: req?.body?.patient?.email,
+                password: passwordHash
+            }
+        })
+        return await trans.patient.create({
+            data: req?.body?.patient
+        })
+    })
+    return result;
 }
 
 

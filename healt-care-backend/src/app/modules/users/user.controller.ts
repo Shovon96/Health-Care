@@ -6,7 +6,6 @@ import { UserService } from "./user.services";
 
 const createPatient = catchAsync(async (req: Request, res: Response) => {
     const result = await UserService.createPatient(req)
-    console.log(req.body)
     sendResponse(res, {
         statusCode: 200,
         success: true,
