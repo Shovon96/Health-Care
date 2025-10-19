@@ -21,8 +21,10 @@ const uploadToCloudinary = async (file: Express.Multer.File) => {
     // } catch (error) {
     //     throw new Error('Failed to upload to Cloudinary');
     // }
+    console.log("upload cloudinary file", file)
 }
 
 export const FileUploader = {
-    upload
+    upload,
+    uploadToCloudinary
 }
