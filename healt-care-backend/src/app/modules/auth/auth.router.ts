@@ -1,0 +1,12 @@
+import { NextFunction, Request, Response, Router } from "express";
+import { UserController } from "../users/user.controller";
+import { AuthController } from "./auth.controller";
+
+
+const router = Router();
+
+router.post('/login',
+    AuthController.loginUser
+);
+
+export const authRoutes = router
