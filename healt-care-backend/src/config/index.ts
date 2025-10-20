@@ -7,6 +7,9 @@ export default {
     node_env: process.env.NODE_ENV,
     port: process.env.PORT,
     database_url: process.env.DATABASE_URL,
+    jwt_secret: process.env.JWT_SECRET,
+    accesstoken_expires_in: process.env.ACCESSTOKEN_EXPIRES_IN,
+    refreshtoken_expires_in: process.env.REFRESHTOKEN_EXPIRES_IN,
     bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
     cloudinary: {
         cloud_name: process.env.CLOUD_NAME,
