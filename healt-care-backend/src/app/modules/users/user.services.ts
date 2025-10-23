@@ -5,6 +5,7 @@ import { createPatient } from "./user.interface";
 import { FileUploader } from "../../helper/fileUploader";
 import config from "../../../config";
 import { Admin, Doctor, Prisma, UserRole } from "@prisma/client";
+import { paginationHelper } from "../../helper/paginationHelper";
 
 const createPatient = async (req: Request) => {
 
@@ -108,11 +109,11 @@ const createDoctor = async (req: Request): Promise<Doctor> => {
 };
 
 const getAllUsers = async (options: any, filters: any) => {
-    const { page, limit, skip, sortBy, sortOrder } = options
+    const { page, limit, skip, sortBy, sortOrder } = paginationHelper.paginate(options)
     const { searchTerms, ...filterData } = filters
 
     const andConditions: Prisma.UserWhereInput[] = []
-    const searchableValues = ['email', 'role']
+    const searchableValues = ['email']
 
     if (searchTerms) {
         andConditions.push({
@@ -130,18 +131,32 @@ const getAllUsers = async (options: any, filters: any) => {
         })
     }
 
+    const whereCondition: Prisma.UserWhereInput = andConditions.length > 0 ? {
+        AND: andConditions
+    } : {}
+
     const users = await prisma.user.findMany({
         skip,
         take: limit,
-        where: {
-            AND: andConditions
-        },
+        where: whereCondition,
         orderBy: {
             [sortBy]: sortOrder
         }
     });
-    return users;
-}
+
+    const total = await prisma.user.count({ where: whereCondition })
+
+    return {
+        meta: {
+            page,
+            limit,
+            total
+        },
+        data: {
+            users
+        }
+    }
+};
 
 export const UserService = {
     createPatient,

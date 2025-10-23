@@ -39,8 +39,8 @@ const createDoctor = catchAsync(async (req: Request, res: Response) => {
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
 
-    const options = pick(req.query, ['limit', 'page', 'search', 'sortBy']);
-    const filters = pick(req.query, ['role', 'status', 'email']);
+    const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
+    const filters = pick(req.query, ["status", "role", "email", "searchTerms"]);
     const result = await UserService.getAllUsers(options, filters);
     sendResponse(res, {
         statusCode: 200,
