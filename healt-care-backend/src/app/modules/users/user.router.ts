@@ -3,12 +3,13 @@ import { UserController } from "./user.controller";
 import { UserValidation } from "./user.validation";
 import { FileUploader } from "../../helper/fileUploader";
 import { UserRole } from "@prisma/client";
+import checkAuth from "../../middlewares/checkAuth";
 
 
 const router = Router();
 
 router.get("/all-users",
-    // auth(UserRole.ADMIN),
+    checkAuth(UserRole.ADMIN),
     UserController.getAllUsers
 )
 
@@ -22,7 +23,7 @@ router.post('/create-patient',
 
 router.post(
     "/create-admin",
-    // auth(UserRole.ADMIN),
+    // checkAuth(UserRole.ADMIN),
     FileUploader.upload.single('file'),
     (req: Request, res: Response, next: NextFunction) => {
         req.body = UserValidation.createAdminValidationSchema.parse(JSON.parse(req.body.data))
@@ -32,7 +33,7 @@ router.post(
 
 router.post(
     "/create-doctor",
-    // auth(UserRole.ADMIN),
+    // checkAuth(UserRole.ADMIN),
     FileUploader.upload.single('file'),
     (req: Request, res: Response, next: NextFunction) => {
         console.log(JSON.parse(req.body.data))

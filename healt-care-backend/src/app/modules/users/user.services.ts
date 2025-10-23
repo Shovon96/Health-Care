@@ -37,7 +37,7 @@ const createPatient = async (req: Request) => {
 
 const createAdmin = async (req: Request): Promise<Admin> => {
 
-    const isUserExist = await prisma.user.findUnique({ where: { email: req?.body?.doctor?.email } });
+    const isUserExist = await prisma.user.findUnique({ where: { email: req?.body?.admin?.email } });
     if (isUserExist) {
         throw new Error('This Email with user already exists!');
     }

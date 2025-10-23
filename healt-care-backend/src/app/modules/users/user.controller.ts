@@ -18,6 +18,7 @@ const createPatient = catchAsync(async (req: Request, res: Response) => {
 const createAdmin = catchAsync(async (req: Request, res: Response) => {
 
     const result = await UserService.createAdmin(req);
+        console.log(req.body)
     sendResponse(res, {
         statusCode: 201,
         success: true,
