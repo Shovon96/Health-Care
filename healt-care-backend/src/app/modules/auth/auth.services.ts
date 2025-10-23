@@ -25,13 +25,14 @@ const loginUser = async (payload: { email: string, password: string }) => {
         role: user.role
     }, config.jwt_secret as string, config.refreshtoken_expires_in as string);
 
+    const { password, ...userWithoutPassword } = user;
+
     return {
         accessToken,
         refreshToken,
         needPasswordChange: user.needPasswordChange,
-        user
-    }
-}
+        user: userWithoutPassword
+    }}
 
 
 export const AuthService = {

@@ -4,6 +4,7 @@ import { prisma } from "../../shared/prisma";
 import { createPatient } from "./user.interface";
 import { FileUploader } from "../../helper/fileUploader";
 import config from "../../../config";
+import { Admin, Doctor, UserRole } from "@prisma/client";
 
 const createPatient = async (req: Request) => {
 
@@ -35,6 +36,11 @@ const createPatient = async (req: Request) => {
 
 const createAdmin = async (req: Request): Promise<Admin> => {
 
+    const isUserExist = await prisma.user.findUnique({ where: { email: req?.body?.doctor?.email } });
+    if (isUserExist) {
+        throw new Error('This Email with user already exists!');
+    }
+
     const file = req.file;
 
     if (file) {
@@ -42,7 +48,7 @@ const createAdmin = async (req: Request): Promise<Admin> => {
         req.body.admin.profilePhoto = uploadToCloudinary?.secure_url
     }
 
-    const hashedPassword: string = await bcrypt.hash(req.body.password, 10)
+    const hashedPassword: string = await bcrypt.hash(req.body.password, parseInt(config.bcrypt_salt_rounds as string))
 
     const userData = {
         email: req.body.admin.email,
@@ -67,13 +73,18 @@ const createAdmin = async (req: Request): Promise<Admin> => {
 
 const createDoctor = async (req: Request): Promise<Doctor> => {
 
+    const isUserExist = await prisma.user.findUnique({ where: { email: req?.body?.doctor?.email } });
+    if (isUserExist) {
+        throw new Error('This Email with user already exists!');
+    }
+
     const file = req.file;
 
     if (file) {
         const uploadToCloudinary = await FileUploader.uploadToCloudinary(file);
         req.body.doctor.profilePhoto = uploadToCloudinary?.secure_url
     }
-    const hashedPassword: string = await bcrypt.hash(req.body.password, 10)
+    const hashedPassword: string = await bcrypt.hash(req.body.password, parseInt(config.bcrypt_salt_rounds as string))
 
     const userData = {
         email: req.body.doctor.email,
@@ -96,9 +107,18 @@ const createDoctor = async (req: Request): Promise<Doctor> => {
     return result;
 };
 
+const getAllUsers = async ({ limit, page }: { limit: number, page: number }) => {
+    const skip = (page - 1) * limit;
+    const users = await prisma.user.findMany({
+        skip,
+        take: limit
+    });
+    return users;
+}
 
 export const UserService = {
     createPatient,
     createAdmin,
-    createDoctor
+    createDoctor,
+    getAllUsers
 }
