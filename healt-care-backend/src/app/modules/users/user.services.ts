@@ -4,7 +4,7 @@ import { prisma } from "../../shared/prisma";
 import { createPatient } from "./user.interface";
 import { FileUploader } from "../../helper/fileUploader";
 import config from "../../../config";
-import { Admin, Doctor, UserRole } from "@prisma/client";
+import { Admin, Doctor, Prisma, UserRole } from "@prisma/client";
 
 const createPatient = async (req: Request) => {
 
@@ -107,19 +107,37 @@ const createDoctor = async (req: Request): Promise<Doctor> => {
     return result;
 };
 
-const getAllUsers = async ({ limit, page, search, sortBy }:
-    { limit: number, page: number, search?: any, sortBy?: any }) => {
-    const pageNumber = page || 1;
-    const limitNumber = limit || 10;
-    const skip = (pageNumber - 1) * limitNumber;
+const getAllUsers = async (options: any, filters: any) => {
+    const { page, limit, skip, sortBy, sortOrder } = options
+    const { searchTerms, ...filterData } = filters
+
+    const andConditions: Prisma.UserWhereInput[] = []
+    const searchableValues = ['email', 'role']
+
+    if (searchTerms) {
+        andConditions.push({
+            OR: searchableValues.map(field => ({
+                [field]: { contains: searchTerms, mode: 'insensitive' }
+            }))
+        })
+    }
+
+    if (Object.keys(filterData).length > 0) {
+        andConditions.push({
+            AND: Object.keys(filterData).map(key => ({
+                [key]: { equals: (filterData as any)[key] }
+            }))
+        })
+    }
+
     const users = await prisma.user.findMany({
         skip,
-        take: limitNumber,
+        take: limit,
         where: {
-            email: { contains: search, mode: 'insensitive' }
+            AND: andConditions
         },
         orderBy: {
-            email: sortBy === 'asc' ? 'asc' : 'desc'
+            [sortBy]: sortOrder
         }
     });
     return users;
