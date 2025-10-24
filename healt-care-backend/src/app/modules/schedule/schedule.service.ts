@@ -1,5 +1,7 @@
 import { addHours, addMinutes, format } from "date-fns";
 import { prisma } from "../../shared/prisma";
+import { IOptions, paginationHelper } from "../../helper/paginationHelper";
+import { Prisma } from "@prisma/client";
 
 const createSchedule = async (payload: any) => {
     const { startTime, endTime, startDate, endDate } = payload;
@@ -62,6 +64,50 @@ const createSchedule = async (payload: any) => {
 }
 
 
+const getAllSchedules = async (options: IOptions, filters: any) => {
+    const { page, limit, skip, sortBy, sortOrder } = paginationHelper.paginate(options)
+    const { startDateTime: filterStartDateTime, endDateTime: filterEndDateTime } = filters;
+    const andCondition: Prisma.ScheduleWhereInput[] = [];
+
+    if (filterStartDateTime && filterEndDateTime) {
+        andCondition.push({
+            AND: [
+                {
+                    startDateTime: { gte: filterStartDateTime }
+                },
+                {
+                    endDateTime: { lte: filterEndDateTime }
+                }
+            ]
+        })
+    }
+
+    const whereCondition: Prisma.ScheduleWhereInput = andCondition.length > 0 ? {
+        AND: andCondition
+    } : {}
+
+    const result = await prisma.schedule.findMany({
+        where: whereCondition,
+        skip,
+        take: limit,
+        orderBy: {
+            [sortBy]: sortOrder
+        }
+    })
+    const total = await prisma.schedule.count({ where: whereCondition });
+
+    return {
+        meta: {
+            page,
+            limit,
+            total
+        },
+        data: result
+    }
+}
+
+
 export const ScheduleService = {
-    createSchedule
+    createSchedule,
+    getAllSchedules
 };

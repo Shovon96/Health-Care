@@ -5,7 +5,7 @@ import { createPatient } from "./user.interface";
 import { FileUploader } from "../../helper/fileUploader";
 import config from "../../../config";
 import { Admin, Doctor, Prisma, UserRole } from "@prisma/client";
-import { paginationHelper } from "../../helper/paginationHelper";
+import { IOptions, paginationHelper } from "../../helper/paginationHelper";
 
 const createPatient = async (req: Request) => {
 
@@ -108,7 +108,7 @@ const createDoctor = async (req: Request): Promise<Doctor> => {
     return result;
 };
 
-const getAllUsers = async (options: any, filters: any) => {
+const getAllUsers = async (options: IOptions, filters: any) => {
     const { page, limit, skip, sortBy, sortOrder } = paginationHelper.paginate(options)
     const { searchTerms, ...filterData } = filters
 
