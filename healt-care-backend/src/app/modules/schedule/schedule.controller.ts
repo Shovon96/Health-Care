@@ -3,6 +3,7 @@ import catchAsync from "../../shared/catchAsync";
 import sendResponse from "../../shared/sendResponse";
 import { ScheduleService } from "./schedule.service";
 import pick from "../../helper/pick";
+import { IUserPayload } from "../../type/index.type";
 
 const createSchedule = catchAsync(async (req: Request, res: Response) => {
 
@@ -15,10 +16,11 @@ const createSchedule = catchAsync(async (req: Request, res: Response) => {
     })
 });
 
-const getAllSchedules = catchAsync(async (req: Request, res: Response) => {
+const getAllSchedules = catchAsync(async (req: Request & { user?: IUserPayload }, res: Response) => {
+    const user = req.user;
     const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
     const filters = pick(req.query, ["startDateTime", "endDateTime"]);
-    const result = await ScheduleService.getAllSchedules(options, filters);
+    const result = await ScheduleService.getAllSchedules(user as IUserPayload, options, filters);
     sendResponse(res, {
         statusCode: 200,
         success: true,
