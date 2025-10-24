@@ -106,8 +106,19 @@ const getAllSchedules = async (options: IOptions, filters: any) => {
     }
 }
 
+const deleteSchedule = async (scheduleId: string) => {
+    const findSchedule = await prisma.schedule.findUnique({ where: { id: scheduleId } })
+    if (!findSchedule) {
+        throw new Error("No schedule found!")
+    }
+    return await prisma.schedule.delete({
+        where: { id: scheduleId }
+    })
+}
+
 
 export const ScheduleService = {
     createSchedule,
-    getAllSchedules
+    getAllSchedules,
+    deleteSchedule
 };
