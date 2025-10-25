@@ -3,6 +3,8 @@ import { prisma } from "../../shared/prisma";
 import bcrypt from "bcryptjs";
 import { JwtHelper } from "../../helper/jwtHelper";
 import config from "../../../config";
+import ApiError from "../../helper/ApiError";
+import httpStatus from "http-status"
 
 const loginUser = async (payload: { email: string, password: string }) => {
 
@@ -12,7 +14,7 @@ const loginUser = async (payload: { email: string, password: string }) => {
 
     const isCorrectPassword = await bcrypt.compare(payload.password, user.password);
     if (!isCorrectPassword) {
-        throw new Error('Incorrect password');
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect password');
     }
 
     const accessToken = JwtHelper.generateToken({
@@ -32,7 +34,8 @@ const loginUser = async (payload: { email: string, password: string }) => {
         refreshToken,
         needPasswordChange: user.needPasswordChange,
         user: userWithoutPassword
-    }}
+    }
+}
 
 
 export const AuthService = {

@@ -3,6 +3,8 @@ import { prisma } from "../../shared/prisma";
 import { IOptions, paginationHelper } from "../../helper/paginationHelper";
 import { Prisma } from "@prisma/client";
 import { IUserPayload } from "../../type/index.type";
+import ApiError from "../../helper/ApiError";
+import httpStatus from "http-status"
 
 const createSchedule = async (payload: any) => {
     const { startTime, endTime, startDate, endDate } = payload;
@@ -133,7 +135,7 @@ const getAllSchedules = async (user: IUserPayload, options: IOptions, filters: a
 const deleteSchedule = async (scheduleId: string) => {
     const findSchedule = await prisma.schedule.findUnique({ where: { id: scheduleId } })
     if (!findSchedule) {
-        throw new Error("No schedule found!")
+        throw new ApiError(httpStatus.NOT_FOUND, "No schedule found!")
     }
     return await prisma.schedule.delete({
         where: { id: scheduleId }

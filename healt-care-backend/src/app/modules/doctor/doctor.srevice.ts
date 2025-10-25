@@ -1,6 +1,7 @@
+import ApiError from "../../helper/ApiError"
 import { prisma } from "../../shared/prisma"
 import { IUserPayload } from "../../type/index.type"
-
+import httpStatus from "http-status"
 
 const createDoctorSchedule = async (user: IUserPayload, payload: { scheduleIds: string[] }) => {
     const doctorData = await prisma.doctor.findUniqueOrThrow({
@@ -8,7 +9,7 @@ const createDoctorSchedule = async (user: IUserPayload, payload: { scheduleIds: 
     })
 
     if (!doctorData?.id) {
-        throw new Error("Only doctors can create schedules!")
+        throw new ApiError(httpStatus.UNAUTHORIZED, "Only doctors can create schedules!")
     }
 
     const doctorScheduleData = payload.scheduleIds.map(scheduleId => ({
