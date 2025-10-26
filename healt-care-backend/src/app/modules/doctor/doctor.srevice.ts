@@ -4,6 +4,7 @@ import { IOptions, paginationHelper } from "../../helper/paginationHelper"
 import { prisma } from "../../shared/prisma"
 import { IUserPayload } from "../../type/index.type"
 import httpStatus from "http-status"
+import { IDoctorUpdateInfo } from "./doctor.type"
 
 const createDoctorSchedule = async (user: IUserPayload, payload: { scheduleIds: string[] }) => {
     const doctorData = await prisma.doctor.findUniqueOrThrow({
@@ -73,17 +74,56 @@ const getAllDoctors = async (options: IOptions, filters: any) => {
 }
 
 
-const updateDoctorInfo = async (doctorId: string, payload: Partial<Doctor>) => {
+const updateDoctorInfo = async (doctorId: string, payload: Partial<IDoctorUpdateInfo>) => {
     const doctorInfo = await prisma.doctor.findFirstOrThrow({
         where: { id: doctorId }
     })
 
-    const updateData = await prisma.doctor.update({
-        where: { id: doctorInfo.id },
-        data: payload
+    const { specialties, ...doctorData } = payload;
+
+    return await prisma.$transaction(async (tnx) => {
+        if (specialties && specialties.length > 0) {
+
+            const deleteSpecialtiesId = specialties.filter((specialty: any) => specialty.isDeleted)
+
+            for (const specialty of deleteSpecialtiesId) {
+                await tnx.doctorSpecialties.deleteMany({
+                    where: {
+                        doctorId: doctorId,
+                        specialitiesId: specialty.specialtyId
+                    }
+                })
+            }
+
+            const createSpecialtyIds = specialties.filter((specialty) => !specialty.isDeleted);
+
+            for (const specialty of createSpecialtyIds) {
+                await tnx.doctorSpecialties.create({
+                    data: {
+                        doctorId: doctorId,
+                        specialitiesId: specialty.specialtyId
+                    }
+                })
+            }
+        }
+
+        const updatedData = await tnx.doctor.update({
+            where: {
+                id: doctorInfo.id
+            },
+            data: doctorData,
+            include: {
+                doctorSpecialties: {
+                    include: {
+                        specialities: true
+                    }
+                }
+            }
+        })
+
+        return updatedData
     })
 
-    return updateData
 }
 
 export const DoctorService = {
