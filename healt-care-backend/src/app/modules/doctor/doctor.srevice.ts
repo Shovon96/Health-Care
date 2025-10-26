@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client"
+import { Doctor, Prisma } from "@prisma/client"
 import ApiError from "../../helper/ApiError"
 import { IOptions, paginationHelper } from "../../helper/paginationHelper"
 import { prisma } from "../../shared/prisma"
@@ -73,7 +73,21 @@ const getAllDoctors = async (options: IOptions, filters: any) => {
 }
 
 
+const updateDoctorInfo = async (doctorId: string, payload: Partial<Doctor>) => {
+    const doctorInfo = await prisma.doctor.findFirstOrThrow({
+        where: { id: doctorId }
+    })
+
+    const updateData = await prisma.doctor.update({
+        where: { id: doctorInfo.id },
+        data: payload
+    })
+
+    return updateData
+}
+
 export const DoctorService = {
     createDoctorSchedule,
-    getAllDoctors
+    getAllDoctors,
+    updateDoctorInfo
 };

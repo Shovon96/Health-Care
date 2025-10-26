@@ -13,8 +13,9 @@ const getAllDoctors = catchAsync(async (req: Request & { user?: IUserPayload }, 
     sendResponse(res, {
         statusCode: 200,
         success: true,
-        message: "Schedules created successfully!",
-        data: result
+        message: "Doctors retrieved successfully!",
+        meta: result.meta,
+        data: result.data
     })
 })
 
@@ -31,7 +32,20 @@ const createDoctorSchedule = catchAsync(async (req: Request & { user?: IUserPayl
 })
 
 
+const updateDoctorInfo = catchAsync(async (req: Request & { user?: IUserPayload }, res: Response) => {
+    const { doctorId } = req.params
+    const result = await DoctorService.updateDoctorInfo(doctorId, req.body);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Doctor Info successfully!",
+        data: result
+    })
+})
+
+
 export const DoctorController = {
     createDoctorSchedule,
-    getAllDoctors
+    getAllDoctors,
+    updateDoctorInfo
 };
