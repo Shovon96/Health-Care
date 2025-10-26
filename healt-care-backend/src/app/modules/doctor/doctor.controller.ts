@@ -44,8 +44,20 @@ const updateDoctorInfo = catchAsync(async (req: Request & { user?: IUserPayload 
 })
 
 
+const getAiSuggestionDoctor = catchAsync(async (req: Request & { user?: IUserPayload }, res: Response) => {
+    const result = await DoctorService.getAiSuggestionDoctor(req.body);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Ai suggestion doctors retrived successfully!",
+        data: result
+    })
+})
+
+
 export const DoctorController = {
     createDoctorSchedule,
     getAllDoctors,
-    updateDoctorInfo
+    updateDoctorInfo,
+    getAiSuggestionDoctor
 };

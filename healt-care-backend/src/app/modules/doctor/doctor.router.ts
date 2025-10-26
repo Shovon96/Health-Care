@@ -7,6 +7,7 @@ import { UserRole } from "@prisma/client";
 const router = Router()
 router.get('/', DoctorController.getAllDoctors)
 router.patch('/:doctorId', DoctorController.updateDoctorInfo)
+router.post('/suggestion', DoctorController.getAiSuggestionDoctor)
 router.post('/schedule', checkAuth(UserRole.DOCTOR), DoctorController.createDoctorSchedule)
 
 export const doctorRouter = router;
