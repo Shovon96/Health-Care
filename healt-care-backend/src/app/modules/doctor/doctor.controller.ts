@@ -43,6 +43,39 @@ const updateDoctorInfo = catchAsync(async (req: Request & { user?: IUserPayload 
     })
 })
 
+const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await DoctorService.getByIdFromDB(id);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Doctor retrieval successfully',
+        data: result,
+    });
+});
+
+const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await DoctorService.deleteFromDB(id);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Doctor deleted successfully',
+        data: result,
+    });
+});
+
+
+const softDelete = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await DoctorService.softDelete(id);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Doctor soft deleted successfully',
+        data: result,
+    });
+});
 
 const getAiSuggestionDoctor = catchAsync(async (req: Request & { user?: IUserPayload }, res: Response) => {
     const result = await DoctorService.getAiSuggestionDoctor(req.body);
@@ -59,5 +92,8 @@ export const DoctorController = {
     createDoctorSchedule,
     getAllDoctors,
     updateDoctorInfo,
+    getByIdFromDB,
+    deleteFromDB,
+    softDelete,
     getAiSuggestionDoctor
 };
