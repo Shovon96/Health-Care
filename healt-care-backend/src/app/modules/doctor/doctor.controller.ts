@@ -6,7 +6,7 @@ import { IUserPayload } from "../../type/index.type";
 import pick from "../../helper/pick";
 
 
-const getAllDoctors = catchAsync(async (req: Request & { user?: IUserPayload }, res: Response) => {
+const getAllDoctors = catchAsync(async (req: Request, res: Response) => {
     const options = pick(req.query, ["page", "limit", "sortBy", "sortOrder"]);
     const filters = pick(req.query, ["searchTerm", "email", "contactNumber", "appointmentFee", "specialist"]);
     const result = await DoctorService.getAllDoctors(options, filters);
@@ -19,7 +19,6 @@ const getAllDoctors = catchAsync(async (req: Request & { user?: IUserPayload }, 
     })
 })
 
-
 const createDoctorSchedule = catchAsync(async (req: Request & { user?: IUserPayload }, res: Response) => {
     const user = req.user;
     const result = await DoctorService.createDoctorSchedule(user as IUserPayload, req.body);
@@ -31,8 +30,7 @@ const createDoctorSchedule = catchAsync(async (req: Request & { user?: IUserPayl
     })
 })
 
-
-const updateDoctorInfo = catchAsync(async (req: Request & { user?: IUserPayload }, res: Response) => {
+const updateDoctorInfo = catchAsync(async (req: Request, res: Response) => {
     const { doctorId } = req.params
     const result = await DoctorService.updateDoctorInfo(doctorId, req.body);
     sendResponse(res, {
@@ -64,7 +62,6 @@ const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
         data: result,
     });
 });
-
 
 const softDelete = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;

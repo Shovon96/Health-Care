@@ -8,13 +8,9 @@ import checkAuth from '../../middlewares/checkAuth';
 
 const router = express.Router();
 
-router.get(
-    '/',
-    SpecialtiesController.getAllFromDB
-);
+router.get('/', SpecialtiesController.getAllFromDB);
 
-router.post(
-    '/',
+router.post('/',
     FileUploader.upload.single('file'),
     (req: Request, res: Response, next: NextFunction) => {
         req.body = SpecialtiesValidtaion.create.parse(JSON.parse(req.body.data))
@@ -22,8 +18,7 @@ router.post(
     }
 );
 
-router.delete(
-    '/:id',
+router.delete('/:id',
     checkAuth(UserRole.DOCTOR, UserRole.ADMIN),
     SpecialtiesController.deleteFromDB
 );
