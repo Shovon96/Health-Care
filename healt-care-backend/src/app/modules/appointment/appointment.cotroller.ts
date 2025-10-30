@@ -18,7 +18,7 @@ const createAppointment = catchAsync(async (req: Request & { user?: IUserPayload
 
 
 const getMyAppointment = catchAsync(async (req: Request & { user?: IUserPayload }, res: Response) => {
-    
+
     const options = pick(req.query, ["page", "limit", "sortBy", "sortOrder"]);
     const fillters = pick(req.query, ["status", "paymentStatus"])
     const user = req.user;
@@ -32,7 +32,23 @@ const getMyAppointment = catchAsync(async (req: Request & { user?: IUserPayload 
     })
 })
 
+const updateAppointmentStatus = catchAsync(async (req: Request & { user?: IUserPayload }, res: Response) => {
+    const { id } = req.params;
+    const { status } = req.body;
+    const user = req.user;
+
+    const result = await AppointmentService.updateAppointmentStatus(id, status, user as IUserPayload);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Appointment updated successfully!",
+        data: result
+    })
+})
+
 export const AppointmentController = {
     createAppointment,
-    getMyAppointment
+    getMyAppointment,
+    updateAppointmentStatus
 }
