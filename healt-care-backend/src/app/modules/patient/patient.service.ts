@@ -2,6 +2,7 @@ import { Patient, Prisma, UserStatus } from '@prisma/client';
 import { IPatientFilterRequest } from './patient.interface';
 import { IOptions, paginationHelper } from '../../helper/paginationHelper';
 import { prisma } from '../../shared/prisma';
+import { IUserPayload } from '../../type/index.type';
 
 
 const getAllFromDB = async (
@@ -78,7 +79,6 @@ const getByIdFromDB = async (id: string): Promise<Patient | null> => {
     return result;
 };
 
-
 const softDelete = async (id: string): Promise<Patient | null> => {
     return await prisma.$transaction(async transactionClient => {
         const deletedPatient = await transactionClient.patient.update({
@@ -101,8 +101,64 @@ const softDelete = async (id: string): Promise<Patient | null> => {
     });
 };
 
+
+const updatePatientHealthInfo = async (user: IUserPayload, payload: any) => {
+    const { medicalReport, patientHealthData, ...patientData } = payload;
+
+    const patientInfo = await prisma.patient.findUniqueOrThrow({
+        where: {
+            email: user.email,
+            isDeleted: false
+        }
+    })
+
+    return await prisma.$transaction(async (tnx) => {
+        await tnx.patient.update({
+            where: {
+                id: patientInfo.id
+            },
+            data: patientData
+        })
+
+        if (patientHealthData) {
+            await tnx.patientHealthData.upsert({
+                where: {
+                    patientId: patientInfo.id
+                },
+                update: patientHealthData,
+                create: {
+                    ...patientHealthData,
+                    patientId: patientInfo.id
+                }
+            })
+        }
+
+        if (medicalReport) {
+            await tnx.medicalReport.create({
+                data: {
+                    ...medicalReport,
+                    patientId: patientInfo.id
+                }
+            })
+        }
+
+        const result = await tnx.patient.findUnique({
+            where: {
+                id: patientInfo.id
+            },
+            include: {
+                PatientHealthData: true,
+                MedicalReport: true
+            }
+        })
+
+        return result
+    })
+}
+
 export const PatientService = {
     getAllFromDB,
     getByIdFromDB,
-    softDelete
+    softDelete,
+    updatePatientHealthInfo
 };

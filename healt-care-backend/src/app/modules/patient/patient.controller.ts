@@ -4,6 +4,7 @@ import catchAsync from '../../shared/catchAsync';
 import sendResponse from '../../shared/sendResponse';
 import pick from '../../helper/pick';
 import { PatientService } from './patient.service';
+import { IUserPayload } from '../../type/index.type';
 
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
@@ -46,8 +47,20 @@ const softDelete = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const updatePatientHealthInfo = catchAsync(async (req: Request & { user?: IUserPayload }, res: Response) => {
+    const user = req.user;
+    const result = await PatientService.updatePatientHealthInfo(user as IUserPayload, req.body);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Patient updated successfully',
+        data: result,
+    });
+});
+
 export const PatientController = {
     getAllFromDB,
     getByIdFromDB,
-    softDelete
+    softDelete,
+    updatePatientHealthInfo
 };

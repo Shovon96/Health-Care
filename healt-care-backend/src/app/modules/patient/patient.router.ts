@@ -1,21 +1,17 @@
 import express from 'express';
 import { PatientController } from './patient.controller';
+import checkAuth from '../../middlewares/checkAuth';
+import { UserRole } from '@prisma/client';
 
 const router = express.Router();
 
-router.get(
-    '/',
-    PatientController.getAllFromDB
-);
+router.get('/', PatientController.getAllFromDB);
 
-router.get(
-    '/:id',
-    PatientController.getByIdFromDB
-);
+router.get('/:id', PatientController.getByIdFromDB);
 
-router.delete(
-    '/soft/:id',
-    PatientController.softDelete
-);
+router.patch('/', checkAuth(UserRole.PATIENT), PatientController.updatePatientHealthInfo);
+
+
+router.delete('/soft/:id', PatientController.softDelete);
 
 export const patientRoutes = router;
