@@ -8,7 +8,9 @@ import checkAuth from "../../middlewares/checkAuth";
 
 const router = Router();
 
-router.get("/profile", UserController.getProfile)
+router.get("/profile", 
+    checkAuth(UserRole.ADMIN, UserRole.DOCTOR, UserRole.PATIENT),
+    UserController.getMyProfile)
 
 router.get("/all-users",
     checkAuth(UserRole.ADMIN),
@@ -43,5 +45,7 @@ router.post(
         return UserController.createDoctor(req, res, next)
     }
 );
+
+router.patch('/:id/status', checkAuth(UserRole.ADMIN), UserController.changeProfileStatus)
 
 export const userRoutes = router
