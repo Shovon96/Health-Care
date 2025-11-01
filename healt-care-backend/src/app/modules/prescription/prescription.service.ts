@@ -3,6 +3,7 @@ import { IUserPayload } from "../../type/index.type";
 import { prisma } from "../../shared/prisma";
 import ApiError from "../../helper/ApiError";
 import httpStatus from "http-status";
+import { IOptions, paginationHelper } from "../../helper/paginationHelper";
 
 const createPrescription = async (user: IUserPayload, payload: Partial<Prescription>) => {
     const appointmentData = await prisma.appointment.findUniqueOrThrow({
@@ -39,6 +40,47 @@ const createPrescription = async (user: IUserPayload, payload: Partial<Prescript
 
 }
 
+const patientPrescription = async (user: IUserPayload, options: IOptions) => {
+    const { limit, page, skip, sortBy, sortOrder } = paginationHelper.paginate(options);
+
+    const result = await prisma.prescription.findMany({
+        where: {
+            patient: {
+                email: user.email
+            }
+        },
+        skip,
+        take: limit,
+        orderBy: {
+            [sortBy]: sortOrder
+        },
+        include: {
+            doctor: true,
+            patient: true,
+            appointment: true
+        }
+    })
+
+    const total = await prisma.prescription.count({
+        where: {
+            patient: {
+                email: user.email
+            }
+        }
+    })
+
+    return {
+        meta: {
+            total,
+            page,
+            limit
+        },
+        data: result
+    }
+
+};
+
 export const PrescriptionService = {
-    createPrescription
+    createPrescription,
+    patientPrescription
 }
