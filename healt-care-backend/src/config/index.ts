@@ -7,6 +7,7 @@ export default {
     node_env: process.env.NODE_ENV,
     port: process.env.PORT,
     database_url: process.env.DATABASE_URL,
+    frontend_url: process.env.FRONTEND_URL,
     jwt_secret: process.env.JWT_SECRET,
     accesstoken_expires_in: process.env.ACCESSTOKEN_EXPIRES_IN,
     refreshtoken_expires_in: process.env.REFRESHTOKEN_EXPIRES_IN,
@@ -18,5 +19,7 @@ export default {
     },
     openai_api_key: process.env.OPENAI_API_KEY,
     stripe_secret_key: process.env.STRIPE_SECRET_KEY,
-    stripe_webhook_secret: process.env.STRIPE_WEBHOOK_SECRET
+    stripe_webhook_secret: process.env.STRIPE_WEBHOOK_SECRET,
+    sending_email: process.env.SENDING_EMAIL,
+    sending_email_pass: process.env.SENDING_EMAIL_PASS
 }
