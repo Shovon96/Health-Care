@@ -8,6 +8,8 @@ import checkAuth from "../../middlewares/checkAuth";
 
 const router = Router();
 
+router.get("/profile", UserController.getProfile)
+
 router.get("/all-users",
     checkAuth(UserRole.ADMIN),
     UserController.getAllUsers

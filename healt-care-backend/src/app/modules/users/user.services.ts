@@ -4,10 +4,35 @@ import { prisma } from "../../shared/prisma";
 import { createPatient } from "./user.interface";
 import { FileUploader } from "../../helper/fileUploader";
 import config from "../../../config";
-import { Admin, Doctor, Prisma, UserRole } from "@prisma/client";
+import { Admin, Doctor, Prisma, UserRole, UserStatus } from "@prisma/client";
 import { IOptions, paginationHelper } from "../../helper/paginationHelper";
 import ApiError from "../../helper/ApiError";
 import httpStatus from "http-status"
+import { JwtHelper } from "../../helper/jwtHelper";
+
+
+const getProfile = async (session: any) => {
+    const accessToken = session.accessToken;
+    const decodedData = JwtHelper.verifyToken(accessToken, config.jwt_secret as string);
+
+    const userData = await prisma.user.findUniqueOrThrow({
+        where: {
+            email: decodedData.email,
+            status: UserStatus.ACTIVE
+        }
+    })
+
+    const { id, email, role, needPasswordChange, status } = userData;
+
+    return {
+        id,
+        email,
+        role,
+        needPasswordChange,
+        status
+    }
+
+}
 
 const createPatient = async (req: Request) => {
 
@@ -164,5 +189,6 @@ export const UserService = {
     createPatient,
     createAdmin,
     createDoctor,
-    getAllUsers
+    getAllUsers,
+    getProfile
 }
