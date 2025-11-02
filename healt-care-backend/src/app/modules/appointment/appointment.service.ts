@@ -1,4 +1,4 @@
-import { AppointmentStatus, Prisma, UserRole } from "@prisma/client";
+import { AppointmentStatus, PaymentStatus, Prisma, UserRole } from "@prisma/client";
 import { IOptions, paginationHelper } from "../../helper/paginationHelper";
 import { stripe } from "../../helper/stripe";
 import { prisma } from "../../shared/prisma";
@@ -6,6 +6,7 @@ import { IUserPayload } from "../../type/index.type";
 import { v4 as uuidv4 } from 'uuid';
 import ApiError from "../../helper/ApiError";
 import httpStatus from "http-status";
+import { TextEncoder } from "node:util";
 
 const createAppointment = async (user: IUserPayload, payload: { doctorId: string, scheduleId: string }) => {
 
@@ -174,8 +175,53 @@ const updateAppointmentStatus = async (appointmentId: string, status: Appointmen
 
 }
 
+
+const cancelUnpaidAppointment = async () => {
+    const thirtyMinAgo = new Date(Date.now() - 30 * 60 * 1000)
+
+    const unPaidAppointments = await prisma.appointment.findMany({
+        where: {
+            createdAt: {
+                lte: thirtyMinAgo
+            },
+            paymentStatus: PaymentStatus.UNPAID
+        }
+    })
+
+    const appointmentIdsToCancel = unPaidAppointments.map(appointment => appointment.id);
+
+    await prisma.$transaction(async (tnx) => {
+        await tnx.payment.deleteMany({
+            where: {
+                appointmentId: { in: appointmentIdsToCancel }
+            }
+        })
+
+        await tnx.appointment.deleteMany({
+            where: {
+                id: { in: appointmentIdsToCancel }
+            }
+        })
+
+        for (const unPaidAppointment of unPaidAppointments) {
+            await tnx.doctorSchedule.update({
+                where: {
+                    scheduleId_doctorId: {
+                        doctorId: unPaidAppointment.doctorId,
+                        scheduleId: unPaidAppointment.scheduleId
+                    }
+                },
+                data: {
+                    isBooked: false
+                }
+            })
+        }
+    })
+}
+
 export const AppointmentService = {
     createAppointment,
     getMyAppointment,
-    updateAppointmentStatus
+    updateAppointmentStatus,
+    cancelUnpaidAppointment
 }

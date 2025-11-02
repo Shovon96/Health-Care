@@ -5,6 +5,8 @@ import notFound from './app/middlewares/notFound';
 import router from './app/routes';
 import cookieParser from 'cookie-parser';
 import { PaymentController } from './app/modules/payment/payment.controller';
+import { AppointmentService } from './app/modules/appointment/appointment.service';
+import cron from 'node-cron';
 
 const app: Application = express();
 
@@ -24,6 +26,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+cron.schedule('* * * * *', () => {
+    try {
+        console.log("Node cron called at ", new Date())
+        AppointmentService.cancelUnpaidAppointment();
+    } catch (err) {
+        console.error(err);
+    }
+});
 
 app.use("/api/v1/", router)
 
