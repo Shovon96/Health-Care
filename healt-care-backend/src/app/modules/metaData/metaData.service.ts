@@ -14,7 +14,7 @@ const fetchDashboardMetaData = async (user: IUserPayload) => {
             metaData = await getDoctorMetaData(user);
             break;
         case UserRole.PATIENT:
-            // metaData = await 
+            metaData = await getPatientMetaData(user);
             break;
 
         default:
@@ -111,6 +111,52 @@ const getDoctorMetaData = async (user: IUserPayload) => {
     }
 }
 
+const getPatientMetaData = async (user: IUserPayload) => {
+    const patientData = await prisma.patient.findFirstOrThrow({
+        where: {
+            email: user.email,
+            isDeleted: false
+        }
+    })
+
+    const appointmentCount = await prisma.appointment.count({
+        where: {
+            patientId: patientData?.id
+        }
+    })
+
+    const prescriptionCount = await prisma.prescription.count({
+        where: {
+            patientId: patientData?.id
+        }
+    })
+
+    const reviewCount = await prisma.review.count({
+        where: {
+            patientId: patientData?.id
+        }
+    })
+
+    const appointmentStatusDistribution = await prisma.appointment.groupBy({
+        by: ['appointmentStatus'],
+        _count: { id: true },
+        where: {
+            patientId: patientData?.id
+        }
+    })
+
+    const formattedAppointmentStatusDistribution = appointmentStatusDistribution.map(({ appointmentStatus, _count }) => ({
+        appointmentStatus,
+        count: Number(_count.id)
+    }))
+
+    return {
+        appointmentCount,
+        prescriptionCount,
+        reviewCount,
+        formattedAppointmentStatusDistribution
+    }
+}
 
 const getBarChartData = async () => {
     const appointmentCountPerMounth = await prisma.$queryRaw`
