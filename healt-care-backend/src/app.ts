@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 
 cron.schedule('* * * * *', () => {
     try {
-        console.log("Node cron called at ", new Date())
+        // console.log("Node cron called at ", new Date())
         AppointmentService.cancelUnpaidAppointment();
     } catch (err) {
         console.error(err);
