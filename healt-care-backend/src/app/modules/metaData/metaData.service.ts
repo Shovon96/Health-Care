@@ -9,14 +9,11 @@ const fetchDashboardMetaData = async (user: IUserPayload) => {
     switch (user.role) {
         case UserRole.ADMIN:
             // metaData = await 
-            console.log("admin login")
             break;
         case UserRole.DOCTOR:
             metaData = await getDoctorMetaData(user);
-            console.log("doctor login")
             break;
         case UserRole.PATIENT:
-            console.log("patient login")
             // metaData = await 
             break;
 
@@ -24,6 +21,37 @@ const fetchDashboardMetaData = async (user: IUserPayload) => {
             throw new ApiError(httpStatus.UNAUTHORIZED, "You are not authorized to access this route");
     }
     return metaData;
+}
+
+const getAdminMetaData = async () => {
+    const patientCount = await prisma.patient.count();
+    const doctorCount = await prisma.doctor.count();
+    const adminCount = await prisma.admin.count();
+    const appointmentsCount = await prisma.appointment.count();
+    const paymentCount = await prisma.payment.count();
+
+    const totalRevenue = await prisma.payment.aggregate({
+        _sum: {
+            ammount: true
+        },
+        where: {
+            paymentStatus: PaymentStatus.PAID
+        }
+    })
+
+    const barChartData = getBarChartData();
+    const pieChartData = getPieChartData();
+
+    return {
+        patientCount,
+        doctorCount,
+        adminCount,
+        appointmentsCount,
+        paymentCount,
+        totalRevenue,
+        barChartData,
+        pieChartData
+    }
 }
 
 const getDoctorMetaData = async (user: IUserPayload) => {
