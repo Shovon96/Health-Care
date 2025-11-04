@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { Menu } from "lucide-react";
+import Image from "next/image";
 
 const PublicNavbar = () => {
     const navItems = [
@@ -12,18 +13,23 @@ const PublicNavbar = () => {
         { href: "#", label: "NGOs" },
     ];
     return (
-        <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur  dark:bg-background/95">
+        <header className="sticky top-0 z-50 w-full border-b bg-linear-to-r from-green-200 to-purple-200 backdrop-blur p-1">
             <div className="container mx-auto flex h-16 items-center justify-between px-4">
                 <Link href="/" className="flex items-center space-x-2">
-                    <span className="text-xl font-bold text-primary">PH Doc</span>
+                    <Image
+                        src="https://i.ibb.co.com/pvDNJ40s/health-care-logo.png"
+                        alt="health-care"
+                        width={240}
+                        height={140}
+                    />
                 </Link>
 
-                <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <nav className="hidden md:flex items-center space-x-6 text-md uppercase font-medium">
                     {navItems.map((link) => (
                         <Link
                             key={link.label}
                             href={link.href}
-                            className="text-foreground hover:text-primary transition-colors"
+                            className="hover:text-primary text-secondary hover:underline transition-colors"
                         >
                             {link.label}
                         </Link>
@@ -31,8 +37,8 @@ const PublicNavbar = () => {
                 </nav>
 
                 <div className="hidden md:flex items-center space-x-2">
-                    <Link href="/login" className="text-lg font-medium">
-                        <Button>Login</Button>
+                    <Link href="/login" className="text-lg font-medium uppercase">
+                        <Button>LOGIN</Button>
                     </Link>
                 </div>
 

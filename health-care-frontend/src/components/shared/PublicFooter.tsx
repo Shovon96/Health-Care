@@ -1,12 +1,19 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 function PublicFooter() {
     return (
-        <footer className="border-t bg-background">
+        <footer className="border-t bg-linear-to-r from-green-200 to-purple-200">
             <div className="container mx-auto px-4 py-8">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                     <div>
-                        <h3 className="font-bold mb-2">PH Doc</h3>
+                        <Image
+                            src="https://i.ibb.co.com/pvDNJ40s/health-care-logo.png"
+                            alt="health-care"
+                            width={280}
+                            height={180}
+                            className='py-2'
+                        />
                         <p className="text-sm text-muted-foreground">Your health is our priority. We are here to provide the best medical services.</p>
                     </div>
                     <div>
