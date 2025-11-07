@@ -49,7 +49,7 @@ const DoctorCard = ({ doctor }: { doctor: typeof doctors[0] }) => {
                 />
 
                 <h3 className="text-lg font-semibold px-3 pt-3">{doctor.name}</h3>
-                <div className='flex items-center justify-between px-3'>
+                <div className='flex items-center justify-between px-3 py-1'>
                     <p className="text-secondary font-semibold mt-1">{doctor.specialty}</p>
                     <div className="flex items-center justify-center text-sm">
                         <Star className="text-yellow-400 fill-current" size={16} />
@@ -72,7 +72,7 @@ const DoctorCard = ({ doctor }: { doctor: typeof doctors[0] }) => {
 
 const TopRatedDoctors = () => {
     return (
-        <section className="md:py-20 py-12">
+        <section className="md:pt-20 pt-12">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center max-w-2xl mx-auto">
                     <h2 className="text-3xl font-bold text-foreground uppercase">Our Top Rated Doctor</h2>

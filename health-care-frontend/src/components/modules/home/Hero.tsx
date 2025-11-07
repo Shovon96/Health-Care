@@ -162,7 +162,7 @@ export function Hero({
                                     {/* Submit Button */}
                                     <Button
                                         type="submit"
-                                        className="h-[59.986px] w-full rounded-xl bg-blue-600 text-[15.3px] hover:bg-blue-700"
+                                        className="h-[59.986px] w-full rounded-xl bg-primary text-[15.3px] hover:bg-primary cursor-pointer"
                                     >
                                         {formCard.submitText}
                                     </Button>
