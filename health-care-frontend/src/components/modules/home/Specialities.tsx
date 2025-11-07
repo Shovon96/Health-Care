@@ -32,7 +32,7 @@ const specialists = [
 
 const Specialities = () => {
     return (
-        <section className="md:py-20 py-14">
+        <section className="md:pt-20 pt-12">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
                     <div>
@@ -41,7 +41,7 @@ const Specialities = () => {
                             Access to medical experts across all major specialities.
                         </p>
                     </div>
-                    <a href="#" className="text-secondary text-lg font-semibold hover:underline mt-4 sm:mt-0">
+                    <a href="#" className="text-secondary text-lg font-semibold hover:underline mt-4 sm:mt-0 uppercase">
                         View All
                     </a>
                 </div>
