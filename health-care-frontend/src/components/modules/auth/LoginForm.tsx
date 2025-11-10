@@ -1,63 +1,89 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { cn } from "@/src/lib/utils"
-import { Button } from "@/src/components/ui/button"
-import {
-    Card,
-    CardContent,
-} from "@/src/components/ui/card"
-import {
-    Field,
-    FieldDescription,
-    FieldGroup,
-    FieldLabel,
-} from "@/src/components/ui/field"
-import { Input } from "@/src/components/ui/input"
-import Link from "next/link"
+"use client";
 
-export function LoginForm({
-    className,
-    ...props
-}: React.ComponentProps<"div">) {
+import { useActionState } from "react";
+import { Button } from "@/src/components/ui/button";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/src/components/ui/field";
+import { Input } from "@/src/components/ui/input";
+import { loginUser } from "./LoginUser";
+
+
+const LoginForm = () => {
+    const [state, formAction, isPending] = useActionState(loginUser, null);
+
+    const getFieldError = (fieldName: string) => {
+        if (state && state.errors) {
+            const error = state.errors.find((err: any) => err.field === fieldName);
+            return error.message;
+        } else {
+            return null;
+        }
+    };
+
+    
     return (
-        <div className={cn("flex flex-col gap-6", className)} {...props}>
-            <Card className="border-0 shadow-none">
-                <CardContent>
-                    <form>
-                        <FieldGroup>
-                            <Field>
-                                <FieldLabel htmlFor="email">Email</FieldLabel>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    placeholder="m@example.com"
-                                    required
-                                />
-                            </Field>
-                            <Field>
-                                <div className="flex items-center">
-                                    <FieldLabel htmlFor="password">Password</FieldLabel>
-                                    <Link
-                                        href={'/forgot-password'}
-                                        className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                                    >
-                                        Forgot your password?
-                                    </Link>
-                                </div>
-                                <Input id="password" type="password" placeholder="********" required />
-                            </Field>
-                            <Field>
-                                <Button type="submit" className="cursor-pointer uppercase">Login</Button>
-                                <Button variant="outline" type="button" className="uppercase cursor-pointer">
-                                    Login with Google
-                                </Button>
-                                <FieldDescription className="text-center">
-                                    Don&apos;t have an account? <Link href={'/register'}>Sign up</Link>
-                                </FieldDescription>
-                            </Field>
-                        </FieldGroup>
-                    </form>
-                </CardContent>
-            </Card>
-        </div>
-    )
-}
+        <form action={formAction} className="bg-white p-6 rounded-2xl shadow-gray-300 shadow-md">
+            <FieldGroup>
+                <div className="grid grid-cols-1 gap-4">
+                    {/* Email */}
+                    <Field>
+                        <FieldLabel htmlFor="email">Email</FieldLabel>
+                        <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="m@example.com"
+                        //   required
+                        />
+
+                        {getFieldError("email") && (
+                            <FieldDescription className="text-red-600">
+                                {getFieldError("email")}
+                            </FieldDescription>
+                        )}
+                    </Field>
+
+                    {/* Password */}
+                    <Field>
+                        <FieldLabel htmlFor="password">Password</FieldLabel>
+                        <Input
+                            id="password"
+                            name="password"
+                            type="password"
+                            placeholder="Enter your password"
+                        //   required
+                        />
+                        {getFieldError("password") && (
+                            <FieldDescription className="text-red-600">
+                                {getFieldError("password")}
+                            </FieldDescription>
+                        )}
+                    </Field>
+                </div>
+                <FieldGroup className="mt-4">
+                    <Field>
+                        <Button className="uppercase cursor-pointer" type="submit" disabled={isPending}>
+                            {isPending ? "Logging in..." : "Login"}
+                        </Button>
+                        <FieldDescription className="px-6 text-center">
+                            <a
+                                href="/forget-password"
+                                className="text-blue-600 hover:underline"
+                            >
+                                Forgot password?
+                            </a>
+                        </FieldDescription>
+                        <FieldDescription className="px-6 text-center">
+                            Don&apos;t have an account?{" "}
+                            <a href="/register" className="text-blue-600 hover:underline">
+                                Sign up
+                            </a>
+                        </FieldDescription>
+                    </Field>
+                </FieldGroup>
+            </FieldGroup>
+        </form>
+    );
+};
+
+export default LoginForm;

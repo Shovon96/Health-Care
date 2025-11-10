@@ -1,4 +1,5 @@
-import { LoginForm } from "@/src/components/modules/auth/LoginForm";
+
+import LoginForm from '@/src/components/modules/auth/LoginForm';
 import backgroundImage from '../../../../assets/images/doctor-patient-consultation-image-309.png'
 import Image from "next/image";
 
