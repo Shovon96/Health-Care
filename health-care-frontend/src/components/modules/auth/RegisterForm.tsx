@@ -1,86 +1,122 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { cn } from "@/src/lib/utils"
-import { Button } from "@/src/components/ui/button"
-import {
-    Card,
-    CardContent,
-} from "@/src/components/ui/card"
-import {
-    Field,
-    FieldDescription,
-    FieldGroup,
-    FieldLabel,
-} from "@/src/components/ui/field"
-import { Input } from "@/src/components/ui/input"
-import Link from "next/link"
+"use client";
 
-export function RegisterForm({
-    className,
-    ...props
-}: React.ComponentProps<"div">) {
+import { useActionState } from "react";
+import { Button } from "@/src/components/ui/button";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/src/components/ui/field";
+import { Input } from "@/src/components/ui/input";
+import { registerPatient } from "./registerPatient";
+import { toast } from "sonner";
+ 
+const RegisterForm = () => {
+    const [state, formAction, isPending] = useActionState(registerPatient, null);
+    // if(state?.success === true){
+    //     toast.success('Patient Registered Successfully');
+    // }
+
+    const getFieldError = (fieldName: string) => {
+        if (state && state.errors) {
+            const error = state.errors.find((err: any) => err.field === fieldName);
+            if (error) {
+                return error.message;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    };
     return (
-        <div className={cn("flex flex-col gap-6", className)} {...props}>
-            <Card>
-                <CardContent>
-                    <form>
-                        <FieldGroup>
-                            <Field>
-                                <FieldLabel htmlFor="name">Name</FieldLabel>
-                                <Input
-                                    id="name"
-                                    type="text"
-                                    placeholder="Mr. Jhone"
-                                    required
-                                />
-                            </Field>
-                            <Field>
-                                <FieldLabel htmlFor="email">Email</FieldLabel>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    placeholder="m@example.com"
-                                    required
-                                />
-                            </Field>
-                            <Field>
-                                <FieldLabel htmlFor="password">Password</FieldLabel>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    placeholder="*********"
-                                    required
-                                />
-                            </Field>
-                            <Field>
-                                <FieldLabel htmlFor="confirmPassword">Confirm Password</FieldLabel>
-                                <Input
-                                    id="confirmPassword"
-                                    type="password"
-                                    placeholder="*********"
-                                    required
-                                />
-                            </Field>
-                            <Field>
-                                <FieldLabel htmlFor="address">Address</FieldLabel>
-                                <Input
-                                    id="address"
-                                    type="text"
-                                    placeholder="123 Main St"
-                                />
-                            </Field>
-                            <Field>
-                                <Button type="submit" className="cursor-pointer uppercase">Register</Button>
-                                <Button variant="outline" type="button" className="uppercase cursor-pointer">
-                                    Register with Google
-                                </Button>
-                                <FieldDescription className="text-center">
-                                    If you have an account? <Link href={'/login'}>Sign In</Link>
-                                </FieldDescription>
-                            </Field>
-                        </FieldGroup>
-                    </form>
-                </CardContent>
-            </Card>
-        </div>
-    )
-}
+        <form action={formAction} className="bg-white p-6 rounded-2xl shadow-gray-300 shadow-md ">
+            <FieldGroup>
+                <div>
+                    {/* Name */}
+                    <Field>
+                        <FieldLabel htmlFor="name">Full Name</FieldLabel>
+                        <Input id="name" name="name" type="text" placeholder="John Doe" />
+                        {getFieldError("name") && (
+                            <FieldDescription className="text-red-600">
+                                {getFieldError("name")}
+                            </FieldDescription>
+                        )}
+                    </Field>
+                    {/* Address */}
+                    <Field>
+                        <FieldLabel htmlFor="address">Address</FieldLabel>
+                        <Input
+                            id="address"
+                            name="address"
+                            type="text"
+                            placeholder="123 Main St"
+                        />
+
+                        {getFieldError("address") && (
+                            <FieldDescription className="text-red-600">
+                                {getFieldError("address")}
+                            </FieldDescription>
+                        )}
+                    </Field>
+                    {/* Email */}
+                    <Field>
+                        <FieldLabel htmlFor="email">Email</FieldLabel>
+                        <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="m@example.com"
+                        />
+
+                        {getFieldError("email") && (
+                            <FieldDescription className="text-red-600">
+                                {getFieldError("email")}
+                            </FieldDescription>
+                        )}
+                    </Field>
+                    {/* Password */}
+                    <Field>
+                        <FieldLabel htmlFor="password">Password</FieldLabel>
+                        <Input id="password" name="password" type="password" placeholder="*******" />
+
+                        {getFieldError("password") && (
+                            <FieldDescription className="text-red-600">
+                                {getFieldError("password")}
+                            </FieldDescription>
+                        )}
+                    </Field>
+                    {/* Confirm Password */}
+                    <Field className="md:col-span-2">
+                        <FieldLabel htmlFor="confirmPassword">Confirm Password</FieldLabel>
+                        <Input
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            type="password"
+                            placeholder="********"
+                        />
+
+                        {getFieldError("confirmPassword") && (
+                            <FieldDescription className="text-red-600">
+                                {getFieldError("confirmPassword")}
+                            </FieldDescription>
+                        )}
+                    </Field>
+                </div>
+                <FieldGroup className="mt-4">
+                    <Field>
+                        <Button className="cursor-pointer uppercase" type="submit" disabled={isPending}>
+                            {isPending ? "Creating Account...." : "Create Account"}
+                        </Button>
+
+                        <FieldDescription className="px-6 text-center">
+                            Already have an account?{" "}
+                            <a href="/login" className="text-blue-600 hover:underline">
+                                Sign in
+                            </a>
+                        </FieldDescription>
+                    </Field>
+                </FieldGroup>
+            </FieldGroup>
+        </form>
+    );
+};
+
+export default RegisterForm;

@@ -1,4 +1,4 @@
-import { RegisterForm } from "@/src/components/modules/auth/RegisterForm";
+import RegisterForm from '@/src/components/modules/auth/RegisterForm';
 import backgroundImage from '../../../../assets/images/doctor-patient-online-consultation-image-309.png'
 import Image from "next/image";
 
