@@ -20,7 +20,7 @@ export function RegisterForm({
 }: React.ComponentProps<"div">) {
     return (
         <div className={cn("flex flex-col gap-6", className)} {...props}>
-            <Card className="border-0 shadow-none">
+            <Card>
                 <CardContent>
                     <form>
                         <FieldGroup>
