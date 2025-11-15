@@ -3,8 +3,10 @@ import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { Menu } from "lucide-react";
 import Image from "next/image";
+import { getCookie } from "../modules/auth/tokenHandlers";
+import LogoutButton from "./LogoutButton";
 
-const PublicNavbar = () => {
+const PublicNavbar = async () => {
     const navItems = [
         { href: "#", label: "Consultation" },
         { href: "#", label: "Health Plans" },
@@ -12,6 +14,9 @@ const PublicNavbar = () => {
         { href: "#", label: "Diagnostics" },
         { href: "#", label: "NGOs" },
     ];
+
+    const accessToken = await getCookie("accessToken");
+
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-linear-to-r from-green-200 to-purple-200 backdrop-blur p-1">
             <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -36,11 +41,15 @@ const PublicNavbar = () => {
                     ))}
                 </nav>
 
-                <div className="hidden md:flex items-center space-x-2">
-                    <Link href="/login" className="text-lg font-medium uppercase">
-                        <Button>LOGIN</Button>
-                    </Link>
-                </div>
+                {accessToken ? (
+                    <LogoutButton />
+                ) : (
+                    <div className="hidden md:flex items-center space-x-2">
+                        <Link href="/login">
+                            <Button className="text-base font-medium uppercase cursor-pointer">Login</Button>
+                        </Link>
+                    </div>
+                )}
 
                 {/* Mobile Menu */}
 
