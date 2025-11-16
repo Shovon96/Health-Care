@@ -1,24 +1,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { Button } from "@/src/components/ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/src/components/ui/field";
 import { Input } from "@/src/components/ui/input";
 import { loginUser } from "./LoginUser";
+import { toast } from "sonner";
 
 
 const LoginForm = ({ redirect }: { redirect?: string }) => {
     const [state, formAction, isPending] = useActionState(loginUser, null);
 
     const getFieldError = (fieldName: string) => {
-        if (state && state.errors) {
-            const error = state.errors.find((err: any) => err.field === fieldName);
+        if (state && state.error) {
+            const error = state.error.find((err: any) => err.field === fieldName);
             return error.message;
         } else {
             return null;
         }
     };
+
+    useEffect(() => {
+        if ((state && !state.success) && (state.message || state.errors[0].message)) {
+            toast.error(state.message || state.errors[0].message);
+        }
+    }, [state]);
 
 
     return (

@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { Button } from "@/src/components/ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/src/components/ui/field";
 import { Input } from "@/src/components/ui/input";
 import { registerPatient } from "./registerPatient";
 import { toast } from "sonner";
- 
+
 const RegisterForm = () => {
     const [state, formAction, isPending] = useActionState(registerPatient, null);
     // if(state?.success === true){
@@ -15,8 +15,8 @@ const RegisterForm = () => {
     // }
 
     const getFieldError = (fieldName: string) => {
-        if (state && state.errors) {
-            const error = state.errors.find((err: any) => err.field === fieldName);
+        if (state && state.error) {
+            const error = state.error.find((err: any) => err.field === fieldName);
             if (error) {
                 return error.message;
             } else {
@@ -26,6 +26,13 @@ const RegisterForm = () => {
             return null;
         }
     };
+
+    useEffect(() => {
+        if ((state && !state.success) && (state.message || state.errors[0].message)) {
+            toast.error(state.message || state.errors[0].message);
+        }
+    }, [state]);
+
     return (
         <form action={formAction} className="bg-white p-6 rounded-2xl shadow-gray-300 shadow-md ">
             <FieldGroup>
