@@ -12,8 +12,8 @@ const DashboardNavbar = async () => {
     return (
         <DashboardNavbarContent
             userInfo={userInfo}
-            // navItems={navItems}
-            // dashboardHome={dashboardHome}
+        // navItems={navItems}
+        // dashboardHome={dashboardHome}
         />
     );
 };
