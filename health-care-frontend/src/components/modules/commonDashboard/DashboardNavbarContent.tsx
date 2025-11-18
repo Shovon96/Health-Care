@@ -4,20 +4,21 @@ import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/src/components/ui/sheet";
 import { UserInfo } from "@/src/types/user.interface";
-// import { NavSection } from "@/types/dashboard.interface";
+import { NavSection } from "@/src/types/dashboard.interface";
 import { Bell, Menu, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import UserDropdown from "./UserDropdown";
+import DashboardMobileSidebar from "./DashboardSidebarMobileContent";
 
 interface DashboardNavbarContentProps {
   userInfo: UserInfo;
-//   navItems?: NavSection[];
-//   dashboardHome?: string;
+  navItems?: NavSection[];
+  dashboardHome?: string;
 }
 const DashboardNavbarContent = ({
   userInfo,
-//   navItems,
-//   dashboardHome,
+  navItems,
+  dashboardHome,
 }: DashboardNavbarContentProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -46,11 +47,11 @@ const DashboardNavbarContent = ({
           </SheetTrigger>
           {/* Hide the overlay on medium and larger screens */}
           <SheetContent side="left" className="w-64 p-0">
-            {/* <DashboardMobileSidebar
+            <DashboardMobileSidebar
               userInfo={userInfo}
               navItems={navItems || []}
               dashboardHome={dashboardHome || ""}
-            /> */}
+            />
           </SheetContent>
         </Sheet>
 
