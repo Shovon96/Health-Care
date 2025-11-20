@@ -22,7 +22,7 @@ interface TableManagementProps<T> {
     isRefreshing?: boolean
 }
 
-export default function TableManagement<T>({
+export default function ManagementTable<T>({
     data = [],
     columns = [],
     onView,
