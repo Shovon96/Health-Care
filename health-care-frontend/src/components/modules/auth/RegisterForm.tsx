@@ -7,25 +7,10 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/src/component
 import { Input } from "@/src/components/ui/input";
 import { registerPatient } from "./registerPatient";
 import { toast } from "sonner";
+import InputFieldError from "../../shared/InputFieldError";
 
 const RegisterForm = () => {
     const [state, formAction, isPending] = useActionState(registerPatient, null);
-    // if(state?.success === true){
-    //     toast.success('Patient Registered Successfully');
-    // }
-
-    const getFieldError = (fieldName: string) => {
-        if (state && state.error) {
-            const error = state.error.find((err: any) => err.field === fieldName);
-            if (error) {
-                return error.message;
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    };
 
     useEffect(() => {
         if ((state && !state.success) && (state.message || state.errors[0].message)) {
@@ -41,11 +26,7 @@ const RegisterForm = () => {
                     <Field>
                         <FieldLabel htmlFor="name">Full Name</FieldLabel>
                         <Input id="name" name="name" type="text" placeholder="John Doe" />
-                        {getFieldError("name") && (
-                            <FieldDescription className="text-red-600">
-                                {getFieldError("name")}
-                            </FieldDescription>
-                        )}
+                        <InputFieldError fieldName="name" state={state} />
                     </Field>
                     {/* Address */}
                     <Field>
@@ -56,12 +37,7 @@ const RegisterForm = () => {
                             type="text"
                             placeholder="123 Main St"
                         />
-
-                        {getFieldError("address") && (
-                            <FieldDescription className="text-red-600">
-                                {getFieldError("address")}
-                            </FieldDescription>
-                        )}
+                        <InputFieldError fieldName="address" state={state} />
                     </Field>
                     {/* Email */}
                     <Field>
@@ -72,23 +48,13 @@ const RegisterForm = () => {
                             type="email"
                             placeholder="m@example.com"
                         />
-
-                        {getFieldError("email") && (
-                            <FieldDescription className="text-red-600">
-                                {getFieldError("email")}
-                            </FieldDescription>
-                        )}
+                        <InputFieldError fieldName="email" state={state} />
                     </Field>
                     {/* Password */}
                     <Field>
                         <FieldLabel htmlFor="password">Password</FieldLabel>
                         <Input id="password" name="password" type="password" placeholder="*******" />
-
-                        {getFieldError("password") && (
-                            <FieldDescription className="text-red-600">
-                                {getFieldError("password")}
-                            </FieldDescription>
-                        )}
+                        <InputFieldError fieldName="password" state={state} />
                     </Field>
                     {/* Confirm Password */}
                     <Field className="md:col-span-2">
@@ -99,12 +65,7 @@ const RegisterForm = () => {
                             type="password"
                             placeholder="********"
                         />
-
-                        {getFieldError("confirmPassword") && (
-                            <FieldDescription className="text-red-600">
-                                {getFieldError("confirmPassword")}
-                            </FieldDescription>
-                        )}
+                        <InputFieldError fieldName="confirmPassword" state={state} />
                     </Field>
                 </div>
                 <FieldGroup className="mt-4">
