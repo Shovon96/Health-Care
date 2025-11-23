@@ -1,3 +1,5 @@
+"use client"
+
 import { Skeleton } from "@/src/components/ui/skeleton";
 import {
     Table,
