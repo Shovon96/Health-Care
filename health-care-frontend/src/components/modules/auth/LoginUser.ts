@@ -31,20 +31,6 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
             password: formData.get('password'),
         }
 
-        // const validatedFields = loginValidationZodSchema.safeParse(loginData);
-
-        // if (!validatedFields.success) {
-        //     return {
-        //         success: false,
-        //         errors: validatedFields.error.issues.map(issue => {
-        //             return {
-        //                 field: issue.path[0],
-        //                 message: issue.message,
-        //             }
-        //         })
-        //     }
-        // }
-
         if (zodValidation(payload, loginValidationZodSchema).success === false) {
             return zodValidation(payload, loginValidationZodSchema);
         }
@@ -54,7 +40,7 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
         const res = await serverFetch.post("/auth/login", {
             body: JSON.stringify(validatedPayload),
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             }
         });
 

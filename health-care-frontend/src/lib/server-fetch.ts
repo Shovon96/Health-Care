@@ -1,6 +1,6 @@
 import { getCookie } from "../components/modules/auth/tokenHandlers";
 
-const backendURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
+const backendURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
 const serverFetchHelper = async (endpoint: string, options: RequestInit): Promise<Response> => {
 
