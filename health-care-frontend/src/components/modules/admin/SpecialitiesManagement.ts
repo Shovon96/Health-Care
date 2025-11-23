@@ -2,6 +2,7 @@
 "use server"
 
 import { serverFetch } from "@/src/lib/server-fetch";
+import { zodValidation } from "@/src/lib/zodValidation";
 import z from "zod"
 
 const createSpecialityZodSchema = z.object({
@@ -14,15 +15,11 @@ export async function createSpeciality(_prevState: any, formData: FormData) {
             title: formData.get("title") as string,
         }
 
-        const validatedPayload = createSpecialityZodSchema.safeParse(payloade);
-        if (!validatedPayload.success) {
-            return {
-                success: false,
-                errors: validatedPayload.error.issues.map(issue => {
-                    return { field: issue.path[0], message: issue.message }
-                }),
-            }
+        if(zodValidation(payloade, createSpecialityZodSchema).success === false) {
+            return zodValidation(payloade, createSpecialityZodSchema);
         }
+
+        const validatedPayload = zodValidation(payloade, createSpecialityZodSchema).data;
 
         const newFormData = new FormData();
         newFormData.append("data", JSON.stringify(validatedPayload));

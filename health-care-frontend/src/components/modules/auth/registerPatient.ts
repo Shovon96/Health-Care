@@ -3,6 +3,8 @@
 
 import z from "zod";
 import { loginUser } from "./LoginUser";
+import { zodValidation } from "@/src/lib/zodValidation";
+import { serverFetch } from "@/src/lib/server-fetch";
 
 const registerValidationZodSchema = z.object({
     name: z.string().min(1, { message: "Name is required" }),
@@ -24,7 +26,7 @@ const registerValidationZodSchema = z.object({
 
 export const registerPatient = async (_currentState: any, formData: any): Promise<any> => {
     try {
-        const validationData = {
+        const payload = {
             name: formData.get('name'),
             address: formData.get('address'),
             email: formData.get('email'),
@@ -32,27 +34,32 @@ export const registerPatient = async (_currentState: any, formData: any): Promis
             confirmPassword: formData.get('confirmPassword'),
         }
 
-        const validatedFields = registerValidationZodSchema.safeParse(validationData);
+        // const validatedFields = registerValidationZodSchema.safeParse(payload);
 
-        if (!validatedFields.success) {
-            return {
-                success: false,
-                errors: validatedFields.error.issues.map(issue => {
-                    return {
-                        field: issue.path[0],
-                        message: issue.message,
-                    }
-                }
-                )
-            }
+        // if (!validatedFields.success) {
+        //     return {
+        //         success: false,
+        //         errors: validatedFields.error.issues.map(issue => {
+        //             return {
+        //                 field: issue.path[0],
+        //                 message: issue.message,
+        //             }
+        //         }
+        //         )
+        //     }
+        // }
+
+        if (zodValidation(payload, registerValidationZodSchema).success === false) {
+            return zodValidation(payload, registerValidationZodSchema);
         }
 
+        const validatedPayload: any = zodValidation(payload, registerValidationZodSchema).data;
         const registerData = {
-            password: formData.get('password'),
+            password: validatedPayload('password'),
             patient: {
-                name: formData.get('name'),
-                address: formData.get('address'),
-                email: formData.get('email'),
+                name: validatedPayload('name'),
+                address: validatedPayload('address'),
+                email: validatedPayload('email'),
             }
         }
 
@@ -60,9 +67,12 @@ export const registerPatient = async (_currentState: any, formData: any): Promis
 
         newFormData.append("data", JSON.stringify(registerData));
 
-        const res = await fetch("http://localhost:5000/api/v1/user/create-patient", {
-            method: "POST",
-            body: newFormData,
+        if (formData.get("file")) {
+            newFormData.append("file", formData.get("file") as Blob);
+        }
+
+        const res = await serverFetch.post("/user/create-patient", {
+            body: newFormData
         })
 
         const result = await res.json();
