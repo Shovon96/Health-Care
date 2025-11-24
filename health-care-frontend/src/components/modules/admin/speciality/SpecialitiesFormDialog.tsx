@@ -22,11 +22,11 @@ export default function SpecialitiesFormDialog({ open, onClose, onSuccess }: Spe
 
   useEffect(() => {
     if (state && state?.success) {
-      toast.success(state.message);
+      toast.success(state?.message);
       onSuccess();
       onClose();
     } else if (state && !state.success) {
-      toast.error(state.message);
+      toast.error(state?.message || state?.errors[0].message);
     }
   }, [state, onSuccess, onClose]);
 
@@ -41,7 +41,7 @@ export default function SpecialitiesFormDialog({ open, onClose, onSuccess }: Spe
         <form action={formAction} className="space-y-4">
           <Field>
             <FieldLabel htmlFor="title">Title</FieldLabel>
-            <Input id="title" name="title" placeholder="Cardiology" required />
+            <Input id="title" name="title" placeholder="Cardiology" />
             <InputFieldError fieldName="title" state={state} />
           </Field>
 

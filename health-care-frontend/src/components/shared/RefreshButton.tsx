@@ -28,6 +28,7 @@ export default function RefreshButton({
 
     return (
         <Button
+            className="cursor-pointer"
             size={size}
             variant={variant}
             onClick={handleRefresh}
