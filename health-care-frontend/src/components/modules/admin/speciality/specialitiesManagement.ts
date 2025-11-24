@@ -15,7 +15,7 @@ export async function createSpeciality(_prevState: any, formData: FormData) {
             title: formData.get("title") as string,
         }
 
-        if(zodValidation(payloade, createSpecialityZodSchema).success === false) {
+        if (zodValidation(payloade, createSpecialityZodSchema).success === false) {
             return zodValidation(payloade, createSpecialityZodSchema);
         }
 
@@ -31,8 +31,9 @@ export async function createSpeciality(_prevState: any, formData: FormData) {
         const response = await serverFetch.post("/specialties", {
             body: newFormData,
         });
+        const result = await response.json();
 
-        return response
+        return result;
     } catch (error: any) {
         console.log(error.message)
     }
