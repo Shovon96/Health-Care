@@ -68,3 +68,74 @@ export async function createDoctor(_prevState: any, formData: FormData) {
         console.log(error.message)
     }
 }
+
+export async function getAllDoctors(queryParams?: string) {
+    try {
+        const response = await serverFetch.get(`/doctor${queryParams ? `?${queryParams}` : ""}`);
+        const result = await response.json();
+        return result;
+    } catch (error: any) {
+        console.log(error.message)
+    }
+}
+
+export async function getSingleDoctorById(doctorId: string) {
+    try {
+        const response = await serverFetch.get(`/doctor/${doctorId}`);
+        const result = await response.json();
+        return result;
+    } catch (error: any) {
+        console.log(error.message)
+    }
+}
+
+export async function updateDoctorById(doctorId: string, _prevState: any, formData: FormData) {
+    try {
+        const payload: Partial<IDoctor> = {
+            name: formData.get("name") as string,
+            contactNumber: formData.get("contactNumber") as string,
+            address: formData.get("address") as string,
+            registrationNumber: formData.get("registrationNumber") as string,
+            experience: Number(formData.get("experience") as string),
+            gender: formData.get("gender") as "MALE" | "FEMALE",
+            appointmentFee: Number(formData.get("appointmentFee") as string),
+            qualification: formData.get("qualification") as string,
+            currentWorkingPlace: formData.get("currentWorkingPlace") as string,
+            designation: formData.get("designation") as string,
+        }
+
+        const validatedPayload = zodValidation(payload, createDoctorZodSchema.partial()).data;
+
+        const response = await serverFetch.patch(`/doctor/${doctorId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(validatedPayload),
+        })
+        const result = await response.json();
+        return result;
+
+    } catch (error: any) {
+        console.log(error.message)
+    }
+}
+
+export async function softDeleteDoctorById(doctorId: string) {
+    try {
+        const response = await serverFetch.delete(`/doctor/soft/${doctorId}`);
+        const result = await response.json();
+        return result;
+    } catch (error: any) {
+        console.log(error.message)
+    }
+}
+
+export async function deleteDoctorById(doctorId: string) {
+    try {
+        const response = await serverFetch.delete(`/doctor/${doctorId}`);
+        const result = await response.json();
+        return result;
+    } catch (error: any) {
+        console.log(error.message)
+    }
+}
