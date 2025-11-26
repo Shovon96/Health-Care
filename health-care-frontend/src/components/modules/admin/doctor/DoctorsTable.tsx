@@ -9,17 +9,21 @@ import { IDoctor } from "@/src/types/doctor.interface";
 import { softDeleteDoctorById } from "./doctorsManagement";
 import { DoctorsColumns } from "./DoctorColumn";
 import DoctorViewDetailsModal from "./DoctorViewDetailsModal";
+import DoctorFormDialog from "./DoctorFormDialog";
+import { ISpecialty } from "@/src/types/specialities.interface";
 
 
 interface DoctorsTableProps {
     doctors: IDoctor[];
+    specialities: ISpecialty[];
 }
 
-export default function DoctorsTable({ doctors }: DoctorsTableProps) {
+export default function DoctorsTable({ doctors, specialities }: DoctorsTableProps) {
     const router = useRouter();
     const [, startTransition] = useTransition();
     const [deletingDoctor, setDeletingDoctor] = useState<IDoctor | null>(null);
     const [viewingDoctor, setViewingDoctor] = useState<IDoctor | null>(null);
+    const [editingDoctor, setEditingDoctor] = useState<IDoctor | null>(null);
     const [isDeletingDialog, setIsDeletingDialog] = useState(false);
 
     const handleRefresh = () => {
@@ -30,6 +34,10 @@ export default function DoctorsTable({ doctors }: DoctorsTableProps) {
 
     const handleView = (doctor: IDoctor) => {
         setViewingDoctor(doctor);
+    };
+
+    const handleEdit = (doctor: IDoctor) => {
+        setEditingDoctor(doctor);
     };
 
     const handleDelete = (doctor: IDoctor) => {
@@ -57,10 +65,22 @@ export default function DoctorsTable({ doctors }: DoctorsTableProps) {
                 data={doctors}
                 columns={DoctorsColumns}
                 onView={handleView}
-                onEdit={() => { }}
+                onEdit={handleEdit}
                 onDelete={handleDelete}
                 getRowKey={(doctor) => doctor.id!}
                 emptyMessage="No doctors found"
+            />
+
+            {/* Edit Doctor Form Dialog */}
+            <DoctorFormDialog
+                open={!!editingDoctor}
+                onClose={() => setEditingDoctor(null)}
+                doctor={editingDoctor!}
+                specialities={specialities}
+                onSuccess={() => {
+                    setEditingDoctor(null);
+                    handleRefresh();
+                }}
             />
 
             {/* View Doctor Detail Dialog */}

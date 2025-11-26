@@ -37,7 +37,7 @@ export default async function AdminDoctorsManagementPage({ searchParams }: {
                 <RefreshButton />
             </div>
             <Suspense fallback={<TableSkeleton columns={10} rows={10} />}>
-                <DoctorsTable doctors={doctorsResult.data} />
+                <DoctorsTable doctors={doctorsResult.data} specialities={specialistResult.data} />
                 <TablePagination currentPage={doctorsResult.meta.page} totalPages={totalPage} />
             </Suspense>
         </div>
