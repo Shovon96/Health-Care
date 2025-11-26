@@ -5,6 +5,7 @@ import { getSpeciality } from "@/src/components/modules/admin/speciality/special
 import RefreshButton from "@/src/components/shared/RefreshButton";
 import SearchFilter from "@/src/components/shared/SearchFilter";
 import SelectFilter from "@/src/components/shared/SelectFilter";
+import TablePagination from "@/src/components/shared/TablePagination";
 import { TableSkeleton } from "@/src/components/shared/TableSkeleton";
 import { queryStringFormatter } from "@/src/lib/formatters";
 import { ISpecialty } from "@/src/types/specialities.interface";
@@ -18,6 +19,7 @@ export default async function AdminDoctorsManagementPage({ searchParams }: {
     const queryString = queryStringFormatter(searchParamsObj);
     const specialistResult = await getSpeciality();
     const doctorsResult = await getAllDoctors(queryString);
+    const totalPage = Math.ceil(doctorsResult.meta.total / doctorsResult.meta.limit)
 
     return (
         <div className="space-y-6">
@@ -36,6 +38,7 @@ export default async function AdminDoctorsManagementPage({ searchParams }: {
             </div>
             <Suspense fallback={<TableSkeleton columns={10} rows={10} />}>
                 <DoctorsTable doctors={doctorsResult.data} />
+                <TablePagination currentPage={doctorsResult.meta.page} totalPages={totalPage} />
             </Suspense>
         </div>
     )

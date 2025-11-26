@@ -8,6 +8,7 @@ import DeleteConfirmationDialog from "@/src/components/shared/DeletingConfirmati
 import { IDoctor } from "@/src/types/doctor.interface";
 import { softDeleteDoctorById } from "./doctorsManagement";
 import { DoctorsColumns } from "./DoctorColumn";
+import DoctorViewDetailsModal from "./DoctorViewDetailsModal";
 
 
 interface DoctorsTableProps {
@@ -18,12 +19,17 @@ export default function DoctorsTable({ doctors }: DoctorsTableProps) {
     const router = useRouter();
     const [, startTransition] = useTransition();
     const [deletingDoctor, setDeletingDoctor] = useState<IDoctor | null>(null);
+    const [viewingDoctor, setViewingDoctor] = useState<IDoctor | null>(null);
     const [isDeletingDialog, setIsDeletingDialog] = useState(false);
 
     const handleRefresh = () => {
         startTransition(() => {
             router.refresh();
         });
+    };
+
+    const handleView = (doctor: IDoctor) => {
+        setViewingDoctor(doctor);
     };
 
     const handleDelete = (doctor: IDoctor) => {
@@ -50,9 +56,18 @@ export default function DoctorsTable({ doctors }: DoctorsTableProps) {
             <ManagementTable
                 data={doctors}
                 columns={DoctorsColumns}
+                onView={handleView}
+                onEdit={() => { }}
                 onDelete={handleDelete}
                 getRowKey={(doctor) => doctor.id!}
                 emptyMessage="No doctors found"
+            />
+
+            {/* View Doctor Detail Dialog */}
+            <DoctorViewDetailsModal
+                open={!!viewingDoctor}
+                onClose={() => setViewingDoctor(null)}
+                doctor={viewingDoctor}
             />
 
             {/* Delete Confirmation Dialog */}
