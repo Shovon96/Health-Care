@@ -1,7 +1,7 @@
 import DoctorManagementHeader from "@/src/components/modules/admin/doctor/DoctorManagementHeader";
+import { getAllDoctors } from "@/src/components/modules/admin/doctor/doctorsManagement";
+import DoctorsTable from "@/src/components/modules/admin/doctor/DoctorsTable";
 import { getSpeciality } from "@/src/components/modules/admin/speciality/specialitiesManagement";
-import SpecialitiesManagementHeader from "@/src/components/modules/admin/speciality/SpecialitiesManagementHeader";
-import SpecialitiesTable from "@/src/components/modules/admin/speciality/SpecialitiesTable";
 import RefreshButton from "@/src/components/shared/RefreshButton";
 import SearchFilter from "@/src/components/shared/SearchFilter";
 import SelectFilter from "@/src/components/shared/SelectFilter";
@@ -12,6 +12,7 @@ import { Suspense } from "react";
 export default async function AdminDoctorsManagementPage() {
 
     const specialistResult = await getSpeciality();
+    const doctorsResult = await getAllDoctors()
 
     return (
         <div className="space-y-6">
@@ -29,7 +30,7 @@ export default async function AdminDoctorsManagementPage() {
                 <RefreshButton />
             </div>
             <Suspense fallback={<TableSkeleton columns={10} rows={10} />}>
-                {/* <SpecialitiesTable specialities={specialistResult.data} /> */}
+                <DoctorsTable doctors={doctorsResult.data} />
             </Suspense>
         </div>
     )

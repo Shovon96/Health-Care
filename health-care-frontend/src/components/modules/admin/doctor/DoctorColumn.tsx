@@ -9,7 +9,7 @@ import { UserInfoCell } from "@/src/components/shared/UserInfoSell";
 import { IDoctor } from "@/src/types/doctor.interface";
 import { Star } from "lucide-react";
 
-export const doctorsColumns: Column<IDoctor>[] = [
+export const DoctorsColumns: Column<IDoctor>[] = [
     {
         header: "Doctor",
         accessor: (doctor: IDoctor) => (
