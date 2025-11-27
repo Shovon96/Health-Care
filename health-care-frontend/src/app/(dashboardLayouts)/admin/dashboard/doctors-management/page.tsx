@@ -23,12 +23,12 @@ export default async function AdminDoctorsManagementPage({ searchParams }: {
 
     return (
         <div className="space-y-6">
-            <DoctorManagementHeader specialities={specialistResult.data} />
+            <DoctorManagementHeader specialities={specialistResult?.data || []} />
             <div className="flex gap-2">
                 <SearchFilter paramName="searchTerm" placeholder="Search doctors..." />
                 <SelectFilter
                     paramName="specialist"
-                    options={specialistResult.data.map((specialty: ISpecialty) => ({
+                    options={specialistResult?.data?.map((specialty: ISpecialty) => ({
                         label: specialty.title,
                         value: specialty.title,
                     }))}
@@ -37,7 +37,7 @@ export default async function AdminDoctorsManagementPage({ searchParams }: {
                 <RefreshButton />
             </div>
             <Suspense fallback={<TableSkeleton columns={10} rows={10} />}>
-                <DoctorsTable doctors={doctorsResult.data} specialities={specialistResult.data} />
+                <DoctorsTable doctors={doctorsResult?.data} specialities={specialistResult?.data || []} />
                 <TablePagination currentPage={doctorsResult.meta.page} totalPages={totalPage} />
             </Suspense>
         </div>

@@ -1,5 +1,3 @@
-"use client";
-
 import InputFieldError from "@/src/components/shared/InputFieldError";
 import { Button } from "@/src/components/ui/button";
 import {
@@ -22,6 +20,8 @@ import { ISpecialty } from "@/src/types/specialities.interface";
 import { useActionState, useEffect, useState } from "react";
 import { createDoctor, updateDoctorById } from "./doctorsManagement";
 import { toast } from "sonner";
+import { useSpecialtySelection } from "@/src/hooks/useSpecialitySection";
+import SpecialitiesSelection from "./SpecialitiesSelection";
 
 interface DoctorFormDialogProps {
     open: boolean;
@@ -40,6 +40,17 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
     const [state, formAction, pending] = useActionState(
         isEdit ? updateDoctorById.bind(null, doctor?.id!) : createDoctor, null
     )
+
+    const specialtySelection = useSpecialtySelection({
+        doctor,
+        isEdit,
+        open,
+    });
+
+
+    const getSpecialtyTitle = (id: string): string => {
+        return specialities?.find((s) => s.id === id)?.title || "Unknown";
+    };
 
     useEffect(() => {
         if (state?.success) {
@@ -112,7 +123,7 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
                             </>
                         )}
 
-                        <Field>
+                        {/* <Field>
                             <FieldLabel htmlFor="specialities">Speciality</FieldLabel>
                             <Input
                                 id="specialities"
@@ -152,7 +163,26 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
                                 Select a speciality for the doctor
                             </p>
                             <InputFieldError state={state} fieldName="specialities" />
-                        </Field>
+                        </Field> */}
+
+                        {/* Specialty Selection */}
+                        <SpecialitiesSelection
+                            selectedSpecialtyIds={specialtySelection.selectedSpecialtyIds}
+                            removedSpecialtyIds={specialtySelection.removedSpecialtyIds}
+                            currentSpecialtyId={specialtySelection.currentSpecialtyId}
+                            availableSpecialties={specialtySelection.getAvailableSpecialties(
+                                specialities!
+                            )}
+                            isEdit={isEdit}
+                            onCurrentSpecialtyChange={
+                                specialtySelection.setCurrentSpecialtyId
+                            }
+                            onAddSpecialty={specialtySelection.handleAddSpecialty}
+                            onRemoveSpecialty={specialtySelection.handleRemoveSpecialty}
+                            getSpecialtyTitle={getSpecialtyTitle}
+                            getNewSpecialties={specialtySelection.getNewSpecialties}
+                        />
+                        <InputFieldError fieldName="specialties" state={state} />
 
                         <Field>
                             <FieldLabel htmlFor="contactNumber">Contact Number</FieldLabel>

@@ -61,16 +61,16 @@ export default function SpecialitiesSelection({
 
             {/* Selected Specialties Display */}
             {selectedSpecialtyIds?.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-3 p-3 bg-muted rounded-lg">
+                <div className="flex flex-wrap gap-1 mb-2 p-2 bg-muted rounded-lg">
                     {selectedSpecialtyIds?.map((id) => (
-                        <Badge key={id} variant="secondary" className="px-3 py-1.5 text-sm">
+                        <Badge key={id} className="px-2 py-0.5 text-sm bg-secondary">
                             {getSpecialtyTitle(id)}
                             <Button
                                 variant="link"
                                 onClick={() => onRemoveSpecialty(id)}
-                                className="ml-2 hover:text-destructive"
+                                className="text-white cursor-pointer hover:text-destructive"
                             >
-                                <X className="h-3 w-3" />
+                                <X />
                             </Button>
                         </Badge>
                     ))}
