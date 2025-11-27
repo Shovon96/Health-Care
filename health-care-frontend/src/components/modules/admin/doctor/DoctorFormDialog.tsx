@@ -34,7 +34,6 @@ interface DoctorFormDialogProps {
 export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, specialities }: DoctorFormDialogProps) {
 
     const isEdit = !!doctor;
-    const [selectedSpeciality, setSelectedSpeciality] = useState<string>("");
     const [gender, setGender] = useState<"MALE" | "FEMALE">(doctor?.gender || "MALE");
 
     const [state, formAction, pending] = useActionState(
@@ -47,7 +46,6 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
         open,
     });
 
-
     const getSpecialtyTitle = (id: string): string => {
         return specialities?.find((s) => s.id === id)?.title || "Unknown";
     };
@@ -58,7 +56,7 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
             onSuccess();
             onClose();
         } else if (state && !state.success) {
-            toast.error(state.message);
+            toast.error(state?.message || state?.errors[0].message);
         }
     }, [state, onSuccess, onClose]);
 
@@ -77,7 +75,8 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
                                 id="name"
                                 name="name"
                                 placeholder="Dr. John Doe"
-                                defaultValue={isEdit ? doctor?.name : undefined}
+                                // defaultValue={isEdit ? doctor?.name : undefined}
+                                defaultValue={state?.formData?.name || (isEdit ? doctor?.name : "")}
                             />
                             <InputFieldError state={state} fieldName="name" />
                         </Field>
@@ -89,7 +88,7 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
                                 name="email"
                                 type="email"
                                 placeholder="doctor@example.com"
-                                defaultValue={isEdit ? doctor?.email : undefined}
+                                defaultValue={state?.formData?.email || (isEdit ? doctor?.email : "")}
                                 disabled={isEdit}
                             />
                             <InputFieldError state={state} fieldName="email" />
@@ -104,6 +103,7 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
                                         name="password"
                                         type="password"
                                         placeholder="Enter password"
+                                        defaultValue={state?.formData?.password || ""}
                                     />
                                     <InputFieldError state={state} fieldName="password" />
                                 </Field>
@@ -117,53 +117,12 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
                                         name="confirmPassword"
                                         type="password"
                                         placeholder="Confirm password"
+                                        defaultValue={state?.formData?.confirmPassword || ""}
                                     />
                                     <InputFieldError state={state} fieldName="confirmPassword" />
                                 </Field>
                             </>
                         )}
-
-                        {/* <Field>
-                            <FieldLabel htmlFor="specialities">Speciality</FieldLabel>
-                            <Input
-                                id="specialities"
-                                name="specialities"
-                                placeholder="Select a speciality"
-                                // defaultValue={isEdit ? doctor?.doctorSpecialties?.[0]?.specialties?.title : ""}
-                                defaultValue={selectedSpeciality}
-                                type="hidden"
-                            />
-                            <Select
-                                value={
-                                    //   isEdit
-                                    //     ? doctor?.doctorSpecialties?.[0]?.specialties?.title || ""
-                                    //     : selectedSpeciality
-                                    selectedSpeciality
-                                }
-                                onValueChange={setSelectedSpeciality}
-                            >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select a speciality" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {specialities && specialities.length > 0 ? (
-                                        specialities.map((speciality) => (
-                                            <SelectItem key={speciality.id} value={speciality.title}>
-                                                {speciality.title}
-                                            </SelectItem>
-                                        ))
-                                    ) : (
-                                        <SelectItem value="none" disabled>
-                                            No specialities available
-                                        </SelectItem>
-                                    )}
-                                </SelectContent>
-                            </Select>
-                            <p className="text-xs text-gray-500 mt-1">
-                                Select a speciality for the doctor
-                            </p>
-                            <InputFieldError state={state} fieldName="specialities" />
-                        </Field> */}
 
                         {/* Specialty Selection */}
                         <SpecialitiesSelection
@@ -190,7 +149,10 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
                                 id="contactNumber"
                                 name="contactNumber"
                                 placeholder="+1234567890"
-                                defaultValue={doctor?.contactNumber}
+                                defaultValue={
+                                    state?.formData?.contactNumber ||
+                                    (isEdit ? doctor?.contactNumber : "")
+                                }
                             />
                             <InputFieldError state={state} fieldName="contactNumber" />
                         </Field>
@@ -201,7 +163,7 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
                                 id="address"
                                 name="address"
                                 placeholder="123 Main St, City, Country"
-                                defaultValue={isEdit ? doctor?.address : undefined}
+                                defaultValue={state?.formData?.address || (isEdit ? doctor?.address : "")}
                             />
                             <InputFieldError state={state} fieldName="address" />
                         </Field>
@@ -214,7 +176,7 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
                                 id="registrationNumber"
                                 name="registrationNumber"
                                 placeholder="REG123456"
-                                defaultValue={isEdit ? doctor?.registrationNumber : undefined}
+                                defaultValue={state?.formData?.registrationNumber || (isEdit ? doctor?.registrationNumber : "")}
                             />
                             <InputFieldError state={state} fieldName="registrationNumber" />
                         </Field>
@@ -228,7 +190,7 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
                                 name="experience"
                                 type="number"
                                 placeholder="5"
-                                defaultValue={isEdit ? doctor?.experience : undefined}
+                                defaultValue={state?.formData?.experience || (isEdit ? doctor?.experience : "")}
                                 min="0"
                             />
                             <InputFieldError state={state} fieldName="experience" />
@@ -265,7 +227,7 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
                                 name="appointmentFee"
                                 type="number"
                                 placeholder="100"
-                                defaultValue={isEdit ? doctor?.appointmentFee : undefined}
+                                defaultValue={state?.formData?.appointmentFee || (isEdit ? doctor?.appointmentFee : "")}
                                 min="0"
                             />
                             <InputFieldError state={state} fieldName="appointmentFee" />
@@ -277,7 +239,7 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
                                 id="qualification"
                                 name="qualification"
                                 placeholder="MBBS, MD"
-                                defaultValue={isEdit ? doctor?.qualification : undefined}
+                                defaultValue={state?.formData?.qualification || (isEdit ? doctor?.qualification : "")}
                             />
                             <InputFieldError state={state} fieldName="qualification" />
                         </Field>
@@ -290,7 +252,10 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
                                 id="currentWorkingPlace"
                                 name="currentWorkingPlace"
                                 placeholder="City Hospital"
-                                defaultValue={isEdit ? doctor?.currentWorkingPlace : undefined}
+                                defaultValue={
+                                    state?.formData?.currentWorkingPlace ||
+                                    (isEdit ? doctor?.currentWorkingPlace : "")
+                                }
                             />
                             <InputFieldError state={state} fieldName="currentWorkingPlace" />
                         </Field>
@@ -301,7 +266,10 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
                                 id="designation"
                                 name="designation"
                                 placeholder="Senior Consultant"
-                                defaultValue={isEdit ? doctor?.designation : undefined}
+                                defaultValue={
+                                    state?.formData?.designation ||
+                                    (isEdit ? doctor?.designation : "")
+                                }
                             />
                             <InputFieldError state={state} fieldName="designation" />
                         </Field>
@@ -313,7 +281,7 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
                                 <p className="text-xs text-gray-500 mt-1">
                                     Upload a profile photo for the doctor
                                 </p>
-                                <InputFieldError state={state} fieldName="file" />
+                                <InputFieldError state={state} fieldName="profilePhoto" />
                             </Field>
                         )}
                     </div>
