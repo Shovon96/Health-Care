@@ -13,8 +13,16 @@ export type IDoctorUpdateInfo = {
     currentWorkingPlace: string | null;
     designation: string;
     isDeleted: boolean;
-    specialties: {
-        specialtyId: string;
-        isDeleted: boolean;
-    }[]
+    // specialties: {
+    //     specialtyId: string;
+    //     isDeleted: boolean;
+    // }[];
+    specialties?: string[]; // Array of specialty IDs to add
+    removeSpecialties?: string[];
 }
+
+
+export type ISpecialties = {
+    specialtiesId: string;
+    isDeleted?: null;
+};

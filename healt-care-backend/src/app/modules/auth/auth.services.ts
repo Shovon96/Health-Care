@@ -171,6 +171,67 @@ const getMe = async (session: any) => {
         where: {
             email: decodedData.email,
             status: UserStatus.ACTIVE
+        },
+        select: {
+            id: true,
+            email: true,
+            role: true,
+            needPasswordChange: true,
+            status: true,
+            createdAt: true,
+            updatedAt: true,
+            admin: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    profilePhoto: true,
+                    contactNumber: true,
+                    isDeleted: true,
+                    createdAt: true,
+                    updatedAt: true,
+                }
+            },
+            doctor: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    profilePhoto: true,
+                    contactNumber: true,
+                    address: true,
+                    registrationNumber: true,
+                    experience: true,
+                    gender: true,
+                    appointmentFee: true,
+                    qualification: true,
+                    currentWorkingPlace: true,
+                    designation: true,
+                    averageRating: true,
+                    isDeleted: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    doctorSpecialties: {
+                        include: {
+                            specialities: true
+                        }
+                    }
+                }
+            },
+            patient: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    profilePhoto: true,
+                    contactNumber: true,
+                    address: true,
+                    isDeleted: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    PatientHealthData: true,
+                }
+            }
         }
     })
 
