@@ -18,6 +18,7 @@ export default function DoctorManagementHeader({ doctor, specialities }: DoctorM
     const router = useRouter();
     const [, startTransition] = useTransition();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [dialogKey, setDialogKey] = useState(0);
 
     const handleSuccess = () => {
         startTransition(() => {
@@ -25,13 +26,22 @@ export default function DoctorManagementHeader({ doctor, specialities }: DoctorM
         });
     }
 
+    const handleOpenDialog = () => {
+        setDialogKey((prev) => prev + 1); // Force remount
+        setIsDialogOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setIsDialogOpen(false);
+    };
+
     return (
         <div>
             <DoctorFormDialog
+                key={dialogKey}
                 open={isDialogOpen}
-                onClose={() => { setIsDialogOpen(false) }}
-                onSuccess={() => { handleSuccess }}
-                doctor={doctor}
+                onClose={handleCloseDialog}
+                onSuccess={handleSuccess}
                 specialities={specialities}
             />
 
@@ -41,7 +51,7 @@ export default function DoctorManagementHeader({ doctor, specialities }: DoctorM
                 action={{
                     icon: Plus,
                     label: "Add Doctor",
-                    onClick: () => { setIsDialogOpen(true) }
+                    onClick: handleOpenDialog,
                 }}
             />
         </div>
