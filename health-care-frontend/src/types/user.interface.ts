@@ -10,6 +10,8 @@ export interface UserInfo {
     role: UserRole;
     needPasswordChange: boolean;
     status: "ACTIVE" | "BLOCKED" | "DELETED";
+    profilePhoto?: string;
+    contactNumber?: string;
     admin?: IAdmin;
     patient?: IPatient;
     doctor?: IDoctor;

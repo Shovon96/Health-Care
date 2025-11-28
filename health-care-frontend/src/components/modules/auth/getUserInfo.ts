@@ -10,7 +10,7 @@ export const getUserInfo = async (): Promise<UserInfo | any> => {
     let userInfo: UserInfo | any;
     try {
 
-        const response = await serverFetch.get("/auth/me", {
+        const response = await serverFetch.get("/user/profile", {
             cache: "force-cache",
             next: { tags: ["user-info"] }
         })
