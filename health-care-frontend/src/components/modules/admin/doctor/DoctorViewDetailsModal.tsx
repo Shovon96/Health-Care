@@ -27,6 +27,7 @@ interface IDoctorViewDialogProps {
 
 export default function DoctorViewDetailsModal({ open, onClose, doctor }: IDoctorViewDialogProps) {
 
+    console.log(doctor?.doctorSpecialties)
     if (!doctor) {
         return null;
     }
@@ -138,7 +139,7 @@ export default function DoctorViewDetailsModal({ open, onClose, doctor }: IDocto
 
                         {/* Specialties */}
                         {doctor?.doctorSpecialties &&
-                            doctor.doctorSpecialties.length > 0 && (
+                            doctor?.doctorSpecialties.length > 0 && (
                                 <>
                                     <div>
                                         <div className="flex items-center gap-2 mb-4">
@@ -146,13 +147,13 @@ export default function DoctorViewDetailsModal({ open, onClose, doctor }: IDocto
                                             <h3 className="font-semibold text-lg">Specialties</h3>
                                         </div>
                                         <div className="flex flex-wrap gap-2">
-                                            {doctor.doctorSpecialties.map((specialty, index) => (
+                                            {doctor?.doctorSpecialties.map((specialty, index) => (
                                                 <Badge
                                                     key={index}
                                                     variant="outline"
                                                     className="px-4 py-2 text-sm"
                                                 >
-                                                    {specialty.specialties?.title || "Unknown"}
+                                                    {specialty?.specialities?.title || "Unknown"}
                                                 </Badge>
                                             ))}
                                         </div>

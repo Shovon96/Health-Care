@@ -40,8 +40,9 @@ export default function DoctorFormDialog({ open, onClose, onSuccess, doctor, spe
 
     const [gender, setGender] = useState<"MALE" | "FEMALE">(doctor?.gender || "MALE");
     const [state, formAction, pending] = useActionState(
-        isEdit ? updateDoctorById.bind(null, doctor?.id!) : createDoctor, null
-    )
+        isEdit ? updateDoctorById.bind(null, doctor.id!) : createDoctor,
+        null
+    );
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

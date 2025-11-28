@@ -32,7 +32,12 @@ export const DoctorsColumns: Column<IDoctor>[] = [
 
             return (
                 <div className="flex flex-wrap gap-1">
-                    {specialties.map((item: any, index: any) => {
+                    <span
+                        className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                    >
+                        {specialties[0].specialities?.title || "N/A"}
+                    </span>
+                    {/* {specialties.map((item: any, index: any) => {
                         // Handle nested specialty object
                         const specialtyTitle = item.specialities?.title || "N/A";
                         const specialtyId =
@@ -46,7 +51,7 @@ export const DoctorsColumns: Column<IDoctor>[] = [
                                 {specialtyTitle}
                             </span>
                         );
-                    })}
+                    })} */}
                 </div>
             );
         },
