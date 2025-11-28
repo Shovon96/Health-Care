@@ -8,7 +8,7 @@ import checkAuth from "../../middlewares/checkAuth";
 
 const router = Router();
 
-router.get("/profile", 
+router.get("/profile",
     checkAuth(UserRole.ADMIN, UserRole.DOCTOR, UserRole.PATIENT),
     UserController.getMyProfile)
 
@@ -47,5 +47,16 @@ router.post(
 );
 
 router.patch('/:id/status', checkAuth(UserRole.ADMIN), UserController.changeProfileStatus)
+
+router.patch(
+    "/update-my-profile",
+    checkAuth(UserRole.ADMIN, UserRole.DOCTOR, UserRole.PATIENT),
+    FileUploader.upload.single('file'),
+    (req: Request, res: Response, next: NextFunction) => {
+        req.body = JSON.parse(req.body.data)
+        return UserController.updateMyProfie(req, res, next)
+    }
+);
+
 
 export const userRoutes = router
