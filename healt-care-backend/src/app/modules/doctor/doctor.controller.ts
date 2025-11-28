@@ -8,7 +8,7 @@ import pick from "../../helper/pick";
 
 const getAllDoctors = catchAsync(async (req: Request, res: Response) => {
     const options = pick(req.query, ["page", "limit", "sortBy", "sortOrder"]);
-    const filters = pick(req.query, ["searchTerm", "email", "contactNumber", "appointmentFee", "specialist"]);
+    const filters = pick(req.query, ["searchTerm", "email", "contactNumber", "gender", "specialties"]);
     const result = await DoctorService.getAllDoctors(options, filters);
     sendResponse(res, {
         statusCode: 200,

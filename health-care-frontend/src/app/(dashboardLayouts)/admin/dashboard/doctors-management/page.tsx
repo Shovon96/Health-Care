@@ -1,3 +1,4 @@
+import DoctorFilters from "@/src/components/modules/admin/doctor/DoctorFilters";
 import DoctorManagementHeader from "@/src/components/modules/admin/doctor/DoctorManagementHeader";
 import { getAllDoctors } from "@/src/components/modules/admin/doctor/doctorsManagement";
 import DoctorsTable from "@/src/components/modules/admin/doctor/DoctorsTable";
@@ -19,12 +20,14 @@ export default async function AdminDoctorsManagementPage({ searchParams }: {
     const queryString = queryStringFormatter(searchParamsObj);
     const specialistResult = await getSpeciality();
     const doctorsResult = await getAllDoctors(queryString);
-    const totalPage = Math.ceil(doctorsResult.meta.total / doctorsResult.meta.limit)
+    const totalPage = Math.ceil(
+        (doctorsResult?.meta?.total || 1) / (doctorsResult?.meta?.limit || 1)
+    );
 
     return (
         <div className="space-y-6">
             <DoctorManagementHeader specialities={specialistResult?.data || []} />
-            <div className="flex gap-2">
+            {/* <div className="flex gap-2">
                 <SearchFilter paramName="searchTerm" placeholder="Search doctors..." />
                 <SelectFilter
                     paramName="specialist"
@@ -35,10 +38,12 @@ export default async function AdminDoctorsManagementPage({ searchParams }: {
                     placeholder="Filter by speciality"
                 />
                 <RefreshButton />
-            </div>
+            </div> */}
+
+            <DoctorFilters specialties={specialistResult?.data || []} />
             <Suspense fallback={<TableSkeleton columns={10} rows={10} />}>
                 <DoctorsTable doctors={doctorsResult?.data} specialities={specialistResult?.data || []} />
-                <TablePagination currentPage={doctorsResult.meta.page} totalPages={totalPage} />
+                <TablePagination currentPage={doctorsResult?.meta?.page || 1} totalPages={totalPage || 1} />
             </Suspense>
         </div>
     )

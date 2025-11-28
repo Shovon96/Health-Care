@@ -31,7 +31,7 @@ const getAllDoctors = async (options: IOptions, filters: any) => {
     const { page, limit, skip, sortBy, sortOrder } = paginationHelper.paginate(options)
     const { searchTerm, specialties, ...filterData } = filters
 
-    const doctorSearchableFields = ['email', 'name', 'contactNumber']
+    const doctorSearchableFields = ['email', 'name', 'contactNumber', 'address', 'qualification', 'experienceYears']
     const andConditions: Prisma.DoctorWhereInput[] = []
 
     if (searchTerm) {
@@ -41,36 +41,6 @@ const getAllDoctors = async (options: IOptions, filters: any) => {
             }))
         })
     }
-
-    // if (Object.keys(filterData).length > 0) {
-    //     const filterConditions = Object.keys(filterData).map((key) => ({
-    //         [key]: { equals: filterData[key] }
-    //     }))
-    //     andConditions.push(...filterConditions)
-    // }
-
-    // const whereConditions: Prisma.DoctorWhereInput = andConditions.length > 0 ? { AND: andConditions } : {}
-
-    // const result = await prisma.doctor.findMany({
-    //     where: whereConditions,
-    //     skip,
-    //     take: limit,
-    //     orderBy: {
-    //         [sortBy]: sortOrder
-    //     }
-    // })
-
-    // const total = await prisma.doctor.count({ where: whereConditions })
-
-    // return {
-    //     meta: {
-    //         total,
-    //         page,
-    //         limit
-    //     },
-    //     data: result
-    // }
-
 
     // doctor > doctorSpecialties > specialties -> title
     // Handle multiple specialties: ?specialties=Cardiology&specialties=Neurology
@@ -150,58 +120,6 @@ const getAllDoctors = async (options: IOptions, filters: any) => {
     };
 
 }
-
-// const updateDoctorInfo = async (doctorId: string, payload: Partial<IDoctorUpdateInfo>) => {
-//     const doctorInfo = await prisma.doctor.findFirstOrThrow({
-//         where: { id: doctorId }
-//     })
-
-//     const { specialties, ...doctorData } = payload;
-
-//     return await prisma.$transaction(async (tnx) => {
-//         if (specialties && specialties.length > 0) {
-
-//             const deleteSpecialtiesId = specialties.filter((specialty: any) => specialty.isDeleted)
-
-//             for (const specialty of deleteSpecialtiesId) {
-//                 await tnx.doctorSpecialties.deleteMany({
-//                     where: {
-//                         doctorId: doctorId,
-//                         specialitiesId: specialty.specialtyId
-//                     }
-//                 })
-//             }
-
-//             const createSpecialtyIds = specialties.filter((specialty) => !specialty.isDeleted);
-
-//             for (const specialty of createSpecialtyIds) {
-//                 await tnx.doctorSpecialties.create({
-//                     data: {
-//                         doctorId: doctorId,
-//                         specialitiesId: specialty.specialtyId
-//                     }
-//                 })
-//             }
-//         }
-
-//         const updatedData = await tnx.doctor.update({
-//             where: {
-//                 id: doctorInfo.id
-//             },
-//             data: doctorData,
-//             include: {
-//                 doctorSpecialties: {
-//                     include: {
-//                         specialities: true
-//                     }
-//                 }
-//             }
-//         })
-
-//         return updatedData
-//     })
-
-// }
 
 const updateDoctorInfo = async (id: string, payload: IDoctorUpdateInfo) => {
     const { specialties, removeSpecialties, ...doctorData } = payload;
