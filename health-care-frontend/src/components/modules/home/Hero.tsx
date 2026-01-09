@@ -90,7 +90,7 @@ export function Hero({
                                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-[#07824a] animate-slide-up">
                                     {heading.line1}
                                 </h1>
-                                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight bg-gradient-to-r from-[#04BCD4] to-[#54AC5C] bg-clip-text text-transparent animate-slide-up delay-100">
+                                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight bg-linear-to-r from-[#04BCD4] to-[#54AC5C] bg-clip-text text-transparent animate-slide-up delay-100">
                                     {heading.line2}
                                 </h1>
                             </div>
@@ -149,7 +149,7 @@ export function Hero({
                                 {/* Card Header */}
                                 <div className="mb-8 flex items-center justify-between">
                                     <h2 className="text-2xl font-bold text-[#07824a]">{formCard.title}</h2>
-                                    <div className="p-2 bg-gradient-to-br from-[#04BCD4] to-[#54AC5C] rounded-xl">
+                                    <div className="p-2 bg-linear-to-br from-[#04BCD4] to-[#54AC5C] rounded-xl">
                                         <Sparkles className="w-6 h-6 text-white" />
                                     </div>
                                 </div>
@@ -175,7 +175,7 @@ export function Hero({
                                     {/* Submit Button */}
                                     <Button
                                         type="submit"
-                                        className="h-14 w-full rounded-xl bg-gradient-to-r from-[#04BCD4] to-[#54AC5C] text-base font-semibold hover:shadow-lg hover:scale-[1.02] transition-all duration-300 text-white"
+                                        className="h-14 w-full rounded-xl bg-linear-to-r from-[#04BCD4] to-[#54AC5C] text-base font-semibold hover:shadow-lg hover:scale-[1.02] transition-all duration-300 text-white"
                                     >
                                         {formCard.submitText}
                                     </Button>
