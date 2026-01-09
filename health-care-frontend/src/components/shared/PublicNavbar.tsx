@@ -5,6 +5,7 @@ import { Menu } from "lucide-react";
 import Image from "next/image";
 import { getCookie } from "../modules/auth/tokenHandlers";
 import LogoutButton from "./LogoutButton";
+import ManiLogo from "../../assets/images/healthcare-new-logo.png";
 
 const PublicNavbar = async () => {
     const navItems = [
@@ -22,10 +23,10 @@ const PublicNavbar = async () => {
             <div className="container mx-auto flex h-16 items-center justify-between px-4">
                 <Link href="/" className="flex items-center space-x-2">
                     <Image
-                        src="https://i.ibb.co.com/pvDNJ40s/health-care-logo.png"
+                        src={ManiLogo}
                         alt="health-care"
-                        width={240}
-                        height={140}
+                        width={160}
+                        height={30}
                     />
                 </Link>
 

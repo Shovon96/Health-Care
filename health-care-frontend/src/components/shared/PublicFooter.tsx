@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import ManiLogo from "../../assets/images/healthcare-new-logo.png";
 
 function PublicFooter() {
     return (
@@ -8,10 +9,10 @@ function PublicFooter() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                     <div>
                         <Image
-                            src="https://i.ibb.co.com/pvDNJ40s/health-care-logo.png"
+                            src={ManiLogo}
                             alt="health-care"
-                            width={280}
-                            height={180}
+                            width={180}
+                            height={80}
                             className='py-2'
                         />
                         <p className="text-sm text-muted-foreground">Your health is our priority. We are here to provide the best medical services.</p>
@@ -44,7 +45,7 @@ function PublicFooter() {
                     </div>
                 </div>
                 <div className="mt-8 border-t pt-4 text-center text-sm text-muted-foreground">
-                    &copy; {new Date().getFullYear()} PH Doc. All Rights Reserved.
+                    &copy; {new Date().getFullYear()} amar health care. All Rights Reserved.
                 </div>
             </div>
         </footer>
