@@ -3,39 +3,99 @@ import React from 'react';
 import { Card, CardContent } from '@/src/components/ui/card';
 
 const steps = [
-    { icon: Search, title: 'Search Doctor', description: 'Find your doctor easily with a minimum of effort.' },
-    { icon: ClipboardList, title: 'Check Doctor Profile', description: 'Get to know your doctor better.' },
-    { icon: CalendarCheck, title: 'Schedule Appointment', description: 'Choose the time and date that suits you.' },
-    { icon: ShieldCheck, title: 'Get Your Solution', description: 'Our doctors are here to help you.' },
-    { icon: FileText, title: 'Electronic prescription', description: 'Get your prescription instantly.' },
-    { icon: Video, title: 'Instant video consultation', description: 'Consult with your doctor from anywhere.' },
-    { icon: CreditCard, title: 'Easy payment options', description: 'Pay with ease using various methods.' },
-    { icon: HeartPulse, title: 'Health recovery', description: 'Start your journey to better health.' },
+    { 
+        icon: Search, 
+        title: 'Search Doctor', 
+        description: 'Find your doctor easily with a minimum of effort.',
+        number: '01'
+    },
+    { 
+        icon: ClipboardList, 
+        title: 'Check Doctor Profile', 
+        description: 'Get to know your doctor better.',
+        number: '02'
+    },
+    { 
+        icon: CalendarCheck, 
+        title: 'Schedule Appointment', 
+        description: 'Choose the time and date that suits you.',
+        number: '03'
+    },
+    { 
+        icon: ShieldCheck, 
+        title: 'Get Your Solution', 
+        description: 'Our doctors are here to help you.',
+        number: '04'
+    },
+    { 
+        icon: FileText, 
+        title: 'Electronic Prescription', 
+        description: 'Get your prescription instantly.',
+        number: '05'
+    },
+    { 
+        icon: Video, 
+        title: 'Video Consultation', 
+        description: 'Consult with your doctor from anywhere.',
+        number: '06'
+    },
+    { 
+        icon: CreditCard, 
+        title: 'Easy Payment', 
+        description: 'Pay with ease using various methods.',
+        number: '07'
+    },
+    { 
+        icon: HeartPulse, 
+        title: 'Health Recovery', 
+        description: 'Start your journey to better health.',
+        number: '08'
+    },
 ];
 
-const StepCard = ({ icon: Icon, title, description, index }: { icon: React.ElementType, title: string, description: string, index: number }) => {
-    const bgColors = [
-        'bg-blue-50', 'bg-pink-50', 'bg-green-50', 'bg-yellow-50',
-        'bg-pink-50', 'bg-blue-50', 'bg-yellow-50', 'bg-green-50'
-    ];
-    const textColors = [
-        'text-blue-500', 'text-pink-500', 'text-green-500', 'text-yellow-500',
-        'text-pink-500', 'text-blue-500', 'text-yellow-500', 'text-green-500'
-    ];
-
+const StepCard = ({ icon: Icon, title, description, number, index }: { 
+    icon: React.ElementType, 
+    title: string, 
+    description: string, 
+    number: string,
+    index: number 
+}) => {
+    const isEven = index % 2 === 0;
+    
     return (
-        <Card className={`${bgColors[index % 8]}`}>
-            <CardContent className="p-4">
-                <div className="flex items-center space-x-4">
-                    <div className={`p-3 rounded-full ${textColors[index % 8]} bg-white shadow-sm`}>
-                        <Icon size={24} />
+        <Card 
+            className={`group relative overflow-hidden border-2 border-transparent hover:border-[#04BCD4] transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 animate-fade-in bg-white`}
+            style={{ animationDelay: `${index * 100}ms` }}
+        >
+            {/* Number Badge */}
+            <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-linear-to-br from-[#04BCD4] to-[#54AC5C] flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:scale-110 transition-transform duration-300">
+                {number}
+            </div>
+            
+            <CardContent className="p-6 md:p-8">
+                <div className="flex flex-col items-start space-y-4">
+                    {/* Icon */}
+                    <div className={`p-4 rounded-2xl ${isEven ? 'bg-[#04BCD4]/10' : 'bg-[#54AC5C]/10'} group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 ${isEven ? 'group-hover:bg-[#04BCD4]' : 'group-hover:bg-[#54AC5C]'}`}>
+                        <Icon 
+                            className={`${isEven ? 'text-[#04BCD4]' : 'text-[#54AC5C]'} group-hover:text-white transition-colors duration-300`}
+                            size={32} 
+                        />
                     </div>
-                    <div>
-                        <h3 className="font-bold text-foreground">{title}</h3>
-                        <p className="text-muted-foreground text-sm">{description}</p>
+                    
+                    {/* Content */}
+                    <div className="space-y-2">
+                        <h3 className="font-bold text-xl text-[#07824a] group-hover:text-[#04BCD4] transition-colors duration-300">
+                            {title}
+                        </h3>
+                        <p className="text-gray-600 text-sm leading-relaxed">
+                            {description}
+                        </p>
                     </div>
                 </div>
             </CardContent>
+            
+            {/* Hover Effect linear */}
+            <div className="absolute inset-0 bg-linear-to-br from-[#04BCD4]/0 to-[#54AC5C]/0 group-hover:from-[#04BCD4]/5 group-hover:to-[#54AC5C]/5 transition-all duration-500 pointer-events-none" />
         </Card>
     );
 };
@@ -43,19 +103,39 @@ const StepCard = ({ icon: Icon, title, description, index }: { icon: React.Eleme
 
 const Steps = () => {
     return (
-        <section className="md:pt-20 pt-12">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center max-w-2xl mx-auto">
-                    <h2 className="text-3xl font-bold text-foreground uppercase">Easy Steps to Get Your Solution</h2>
-                    <p className="text-muted-foreground mt-4">
-                        We provide advanced technologies and high-quality surgery facilities right here.
+        <section className="py-16 md:py-24">
+            {/* Background Decoration */}
+            <div className="absolute top-0 left-0 w-96 h-96 bg-[#04BCD4]/5 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#54AC5C]/5 rounded-full blur-3xl" />
+            
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
+                {/* Section Header */}
+                <div className="text-center max-w-3xl mx-auto mb-16">
+                    <div className="inline-block mb-4">
+                        <span className="px-4 py-2 bg-[#04BCD4]/10 text-[#04BCD4] rounded-full text-sm font-semibold uppercase">
+                            How It Works
+                        </span>
+                    </div>
+                    <h2 className="text-3xl md:text-4xl font-bold text-[#07824a] uppercase mb-4">
+                        Easy Steps to Get Your Solution
+                    </h2>
+                    <p className="text-gray-600 text-base md:text-lg leading-relaxed">
+                        We provide advanced technologies and high-quality healthcare facilities with a simple, streamlined process
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+                {/* Steps Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {steps.map((step, index) => (
                         <StepCard key={index} {...step} index={index} />
                     ))}
+                </div>
+                
+                {/* Bottom CTA */}
+                <div className="mt-16 text-center">
+                    <button className="px-8 py-4 bg-linear-to-r from-[#04BCD4] to-[#54AC5C] text-white font-semibold rounded-xl hover:shadow-xl hover:scale-105 transition-all duration-300 uppercase cursor-pointer">
+                        Book Your Appointment Now
+                    </button>
                 </div>
             </div>
         </section>
