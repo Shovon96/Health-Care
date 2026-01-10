@@ -9,7 +9,7 @@ import ManiLogo from "../../assets/images/healthcare-new-logo.png";
 
 const PublicNavbar = async () => {
     const navItems = [
-        { href: "#", label: "Consultation" },
+        { href: "/consultation", label: "Consultation" },
         { href: "#", label: "Health Plans" },
         { href: "#", label: "Medicine" },
         { href: "#", label: "Diagnostics" },
