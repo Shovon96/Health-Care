@@ -18,7 +18,7 @@ app.post(
 );
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:3001','https://shato-sheba-frontend.vercel.app'],
+    origin: ['http://localhost:3000', 'https://amar-health-care.vercel.app'],
     credentials: true
 }));
 
