@@ -18,9 +18,7 @@ app.post(
 );
 
 app.use(cors({
-    origin: [
-        'http://localhost:3000'
-    ],
+    origin: ['http://localhost:3000', 'http://localhost:3001','https://shato-sheba-frontend.vercel.app'],
     credentials: true
 }));
 
