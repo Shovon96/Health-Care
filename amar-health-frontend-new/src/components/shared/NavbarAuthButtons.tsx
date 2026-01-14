@@ -42,7 +42,11 @@ export default function NavbarAuthButtons({
 
   return (
     <Link href="/login">
-      <Button>Login</Button>
+      <Button
+        className="cursor-pointer bg-linear-to-r from-[#04BCD4] to-[#54AC5C] hover:shadow-lg hover:scale-105 transition-all duration-300 text-white font-semibold px-6"
+      >
+        Login
+      </Button>
     </Link>
   );
 }

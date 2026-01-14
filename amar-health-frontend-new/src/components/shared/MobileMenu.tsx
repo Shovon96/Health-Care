@@ -42,13 +42,9 @@ const MobileMenu = ({
                 {link.label}
               </Link>
             ))}
-            <div className="border-t pt-4 flex flex-col space-y-4">
-              <div className="flex justify-center w-full">
+            <div className="border-t pt-4 flex justify-start gap-3 space-y-4">
                 <AISearchDialog />
-              </div>
-              <div className="flex justify-center">
                 <ThemeToggle />
-              </div>
               {hasAccessToken && userInfo ? (
                 <>
                   <Link
@@ -65,8 +61,12 @@ const MobileMenu = ({
                   </div>
                 </>
               ) : (
-                <Link href="/login" className="text-lg font-medium">
-                  <Button className="w-full">Login</Button>
+                <Link href="/login">
+                  <Button
+                    className="cursor-pointer bg-linear-to-r from-[#04BCD4] to-[#54AC5C] hover:shadow-lg hover:scale-105 transition-all duration-300 text-white font-semibold w-full px-6"
+                  >
+                    Login
+                  </Button>
                 </Link>
               )}
             </div>

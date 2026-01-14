@@ -6,6 +6,8 @@ import AISearchDialog from "./AISSearchDialog";
 import MobileMenu from "./MobileMenu";
 import NavbarAuthButtons from "./NavbarAuthButtons";
 import { ThemeToggle } from "./ThemeToggle";
+import Image from "next/image";
+import ManiLogo from "../../assets/images/healthcare-new-logo.png";
 
 const PublicNavbar = async () => {
   const navItems = [
@@ -25,8 +27,16 @@ const PublicNavbar = async () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur  dark:bg-background/95">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/" className="flex items-center space-x-2">
-          <span className="text-xl font-bold text-primary">Shasto Sheba</span>
+        {/* Logo */}
+        <Link href="/" className="flex items-center space-x-2 group">
+          <div className="relative">
+            <Image
+              src={ManiLogo}
+              alt="health-care"
+              width={140}
+              height={40}
+            />
+          </div>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
