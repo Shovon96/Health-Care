@@ -1,5 +1,8 @@
+import CallToAction from "@/components/modules/Home/CallToAction";
+import Features from "@/components/modules/Home/Features";
 import { Hero } from "@/components/modules/Home/Hero";
 import Specialities from "@/components/modules/Home/Specialties";
+import Statistics from "@/components/modules/Home/Statistics";
 import Steps from "@/components/modules/Home/Steps";
 import Testimonials from "@/components/modules/Home/Testimonials";
 import TopRatedDoctors from "@/components/modules/Home/TopRatedDoctors";
@@ -22,6 +25,9 @@ export default function Home() {
         <Specialities />
         <TopRatedDoctors />
         <Steps />
+        <Features />
+        <CallToAction />
+        <Statistics />
         <Testimonials />
       </main>
     </>
