@@ -38,7 +38,7 @@ cron.schedule('*/5 * * * *', () => {
 
 app.get('/', (req: Request, res: Response) => {
     res.send({
-        Message: "shasto sheba  server.."
+        Message: "amar health care server.."
     })
 });
 

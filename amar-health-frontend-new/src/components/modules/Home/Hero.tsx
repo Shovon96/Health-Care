@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { HeroProps } from "@/types/heroProps";
+import Link from "next/link";
 
 
 export function Hero({
@@ -68,7 +69,7 @@ export function Hero({
         style={{ animationDelay: '2s' }} />
 
       {/* Content Container */}
-      <div className="w-full px-4 py-16 md:px-8 md:py-20 lg:px-16 lg:py-24 relative z-10">
+      <div className="w-full px-4 py-10 md:px-8 md:py-16 lg:px-16 relative z-10">
         <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 items-center">
             {/* Left Column - Hero Content */}
@@ -104,23 +105,27 @@ export function Hero({
               <div className="flex flex-col sm:flex-row gap-4 animate-slide-up"
                 style={{ animationDelay: '0.3s' }}>
                 {buttons.primary && (
-                  <Button
-                    onClick={buttons.primary.onClick}
-                    className="h-14 gap-3 cursor-pointer rounded-xl px-8 text-base font-semibold bg-linear-to-r from-[#04BCD4] to-[#03a8bd] hover:from-[#03a8bd] hover:to-[#04BCD4] text-white shadow-lg hover:shadow-2xl hover:shadow-[#04BCD4]/30 hover:scale-105 transition-all duration-300"
-                  >
-                    <Search className="w-5 h-5" />
-                    {buttons.primary.text}
-                  </Button>
+                  <Link href="/consultation">
+                    <Button
+                      onClick={buttons.primary.onClick}
+                      className="h-14 gap-3 cursor-pointer rounded-xl px-8 text-base font-semibold bg-linear-to-r from-[#04BCD4] to-[#03a8bd] hover:from-[#03a8bd] hover:to-[#04BCD4] text-white shadow-lg hover:shadow-2xl hover:shadow-[#04BCD4]/30 hover:scale-105 transition-all duration-300"
+                    >
+                      <Search className="w-5 h-5" />
+                      {buttons.primary.text}
+                    </Button>
+                  </Link>
                 )}
                 {buttons.secondary && (
-                  <Button
-                    onClick={buttons.secondary.onClick}
-                    variant="outline"
-                    className="h-14 gap-3 cursor-pointer font-semibold rounded-xl border-2 border-[#54AC5C] dark:border-[#54AC5C] px-8 text-base text-[#54AC5C] dark:text-[#54AC5C] hover:bg-[#54AC5C] hover:text-white dark:hover:text-white hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
-                  >
-                    <Calendar className="w-5 h-5" />
-                    {buttons.secondary.text}
-                  </Button>
+                  <Link href="/consultation">
+                    <Button
+                      onClick={buttons.secondary.onClick}
+                      variant="outline"
+                      className="h-14 gap-3 cursor-pointer font-semibold rounded-xl border-2 border-[#54AC5C] dark:border-[#54AC5C] px-8 text-base text-[#54AC5C] dark:text-[#54AC5C] hover:bg-[#54AC5C] hover:text-white dark:hover:text-white hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
+                    >
+                      <Calendar className="w-5 h-5" />
+                      {buttons.secondary.text}
+                    </Button>
+                  </Link>
                 )}
               </div>
 

@@ -1,4 +1,4 @@
-# Shasto Sheba – Healthcare Management System Frontend
+# Amar Health Care – Healthcare Management System Frontend
 
 A scalable, production-grade, and fully responsive healthcare management platform similar to modern telemedicine solutions, built with Next.js 16, TypeScript, and modern web technologies.
 

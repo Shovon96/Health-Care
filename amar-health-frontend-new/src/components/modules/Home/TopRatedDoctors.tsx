@@ -5,6 +5,7 @@ import Image from 'next/image';
 import cardioDoc from '../../../assets/images/doctor-cardiologist.jpg';
 import neurolDoc from '../../../assets/images/doctor-neurologist.jpg';
 import orthoDoc from '../../../assets/images/doctor-orthopedic.jpg';
+import Link from 'next/link';
 
 const doctors = [
     {
@@ -157,12 +158,14 @@ const TopRatedDoctors = () => {
 
                 {/* Bottom CTA */}
                 <div className="mt-16 text-center">
+                    <Link href="/consultation">
                     <Button
                         size="lg"
                         className="px-10 py-6 text-base bg-linear-to-r from-[#04BCD4] to-[#54AC5C] hover:shadow-xl hover:scale-105 transition-all duration-300 uppercase font-semibold text-white cursor-pointer"
                     >
                         View All Doctors
                     </Button>
+                    </Link>
                 </div>
             </div>
         </section>

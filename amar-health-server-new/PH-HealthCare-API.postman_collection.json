@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "ph-healthcare-api-2025",
+        "_postman_id": "amar-healthcare-api-2025",
         "name": "PH HealthCare API - Complete Collection",
         "description": "Complete API collection for PH HealthCare Backend with all modules including User, Auth, Admin, Doctor, Patient, Specialties, Schedule, Appointment, Payment, Prescription, Review, and Meta",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
